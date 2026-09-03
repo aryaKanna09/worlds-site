@@ -20,7 +20,7 @@ export default function Hero() {
               Same test. Same conditions. Same verdict. Every run.
             </p>
             <p className="mt-6 max-w-[60ch] text-base leading-[1.7] text-gray-lt">
-              worlds grades an agent on what it actually changed, not what it said. Every run replays
+              Worlds grades an agent on what it actually changed, not what it said. Every run replays
               under identical conditions, enforces the real business rules, and ends in a signed report
               you can hand to a buyer, an auditor, or your board.
             </p>

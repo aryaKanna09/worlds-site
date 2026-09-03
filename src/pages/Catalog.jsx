@@ -78,7 +78,9 @@ export default function Catalog({ onInstall }) {
         <h1 className="mt-3 font-sans text-2xl font-medium tracking-[-0.02em] sm:text-3xl">
           Every system your agent touches.
         </h1>
-        <p className="label-mono mt-5 text-xs text-gray-mid">{WORLD_COUNT} WORLDS · ALL INSTALLABLE</p>
+        <p className="label-mono mt-5 text-xs text-gray-mid">
+          {WORLD_COUNT} WORLDS · ALL INSTALLABLE · UPDATED DAILY
+        </p>
       </div>
 
       <div className="mx-auto max-w-[1120px] px-4 pb-16 sm:px-6 md:pb-24">

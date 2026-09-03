@@ -23,7 +23,12 @@ export default function CatalogTeaser({ onInstall }) {
       <H2>Environments we build ourselves.</H2>
       <p className="mt-8 max-w-[720px] text-lg leading-[1.6] text-gray-lt">
         When there's no sandbox to point at, or the sandbox can't be reset, seeded, or broken on purpose,
-        worlds builds the environment.
+        worlds builds the environment. Every world is updated daily against the live service: patch
+        notes, API changes, and internal updates land in the world the same day, so your agent is graded
+        on today's rules, not last quarter's.
+      </p>
+      <p className="label-mono mt-4 text-xs text-gray-mid">
+        <span className="text-accent">●</span> EVERY WORLD SYNCED DAILY
       </p>
 
       <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
