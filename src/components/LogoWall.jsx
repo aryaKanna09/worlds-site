@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { worlds, featuredWorldIds, featuredWorlds } from "../data/worlds.js";
-import { LOGO_ROTATION } from "../data/ui.js";
+import { LOGO_ROTATION, WALL_EXCLUDED_IDS } from "../data/ui.js";
 import WorldLogo from "./WorldLogo.jsx";
 
 // Rotation order: the recognizable names first, then the rest of the catalog.
 // The pointer walks this list, so every logo appears before any repeats.
-const ROTATION = [...featuredWorlds, ...worlds.filter((w) => !featuredWorldIds.includes(w.id))];
+// Worlds with black favicons are skipped; they vanish on the black background.
+const ROTATION = [...featuredWorlds, ...worlds.filter((w) => !featuredWorldIds.includes(w.id))].filter(
+  (w) => !WALL_EXCLUDED_IDS.includes(w.id)
+);
 const { slots: SLOTS, visibleMs, fadeMs, staggerMs } = LOGO_ROTATION;
 
 // Homepage logo wall: fixed slots cycling through every world, full color.

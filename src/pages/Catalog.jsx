@@ -121,13 +121,8 @@ export default function Catalog({ onInstall }) {
             <div className="mt-6">
               {filtered.length ? (
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                  {filtered.map((world, i) => (
-                    <WorldCard
-                      key={world.id}
-                      world={world}
-                      index={String(i + 1).padStart(2, "0")}
-                      onInstall={onInstall}
-                    />
+                  {filtered.map((world) => (
+                    <WorldCard key={world.id} world={world} onInstall={onInstall} />
                   ))}
                 </div>
               ) : (

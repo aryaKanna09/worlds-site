@@ -7,11 +7,15 @@ export const FAVICON_SIZE = 128;
 // staggered so the row never blinks at once. Paused on hover; static under
 // reduced motion.
 export const LOGO_ROTATION = {
-  slots: 12,
+  slots: 4,
   visibleMs: 3500,
   fadeMs: 500,
   staggerMs: 90,
 };
+
+// Worlds whose favicons are black or near-black and disappear on the black
+// background; the homepage logo wall skips them.
+export const WALL_EXCLUDED_IDS = ["github", "square", "kustomer", "linear", "ups", "uber"];
 
 // Hero point-cloud Earth. Desktop tracks the cursor; coarse pointers get a
 // smaller, auto-rotating globe with fewer points. `candidates` are sampled on

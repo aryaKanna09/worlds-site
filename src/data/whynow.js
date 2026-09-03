@@ -22,6 +22,6 @@ export const whynow = [
   },
   {
     kicker: true,
-    text: "We are building for the agentic world. This problem space is only growing.",
+    text: "Agents will soon act on every system your business runs on. worlds is the proof layer that lets you trust them there.",
   },
 ];
