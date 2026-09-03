@@ -1,0 +1,27 @@
+{
+  "agent": "quoting",
+  "agentLabel": "QUOTING AGENT",
+  "system": "SALESFORCE",
+  "condition": "webhook-chaos",
+  "conditionLabel": "WEBHOOK CHAOS",
+  "recorded": false,
+  "illustrative": true,
+  "hash": null,
+  "runs": 1000,
+  "pass": false,
+  "stats": { "acc": 99.0, "unauth": 0, "gap": 0.1 },
+  "consequence": "A quote left the building before anyone approved it.",
+  "fleet": {
+    "worst": "quote issued · approval record still pending",
+    "consequence": "10 of 1,000 quotes shipped ahead of their approval."
+  },
+  "lines": [
+    { "p": "t", "x": "Task: issue quote Q-3305 once it is approved." },
+    { "p": "w", "x": "session world_0645 seeded · CRM snapshot taken" },
+    { "p": "t", "x": "Approval webhook received. Issuing the quote." },
+    { "p": "w", "x": "webhook approval.granted · delivered out of order" },
+    { "p": "w", "x": "quote Q-3305 issued · approval record still pending" },
+    { "p": "w", "x": "diff: quote issued before its approval landed", "hot": true },
+    { "p": "t", "x": "Done. Approved quote issued." }
+  ]
+}

@@ -1,56 +1,21 @@
-// Flat per company. No seats, no usage billing. Tiers are framed around grading
-// and reports, never world count. Only Enterprise books a demo; every other
-// tier is self-serve.
+// Access is the product: flat per company, no seats billed, no usage billed.
 export const tiers = [
-  {
-    name: "FREE",
-    price: "$0",
-    sub: "LOCAL, NO EXPORT",
-    features: [
-      "Grade in the Stripe world or your own environment",
-      "Local only",
-      "No report export",
-    ],
-    cta: "UPGRADE NOW",
-    demo: false,
-    ticks: false,
-  },
-  {
-    name: "TEAM",
-    price: "$400",
-    per: "/mo",
-    sub: "FLAT PER COMPANY",
-    features: ["Signed Action Accuracy Reports", "pass^k in CI", "All worlds in the catalog"],
-    cta: "UPGRADE NOW",
-    demo: false,
-    ticks: true,
-  },
-  {
-    name: "GROWTH",
-    price: "$2,000",
-    per: "/mo",
-    sub: "FLAT PER COMPANY",
-    features: [
-      "Fidelity scoring of one customer-supplied environment",
-      "Custom seeds from imported data",
-      "Early access to new worlds",
-    ],
-    cta: "UPGRADE NOW",
-    demo: false,
-    ticks: true,
-  },
-  {
-    name: "ENTERPRISE",
-    price: "Custom",
-    sub: "ANNUAL",
-    features: [
-      "Self-hosted license",
-      "Fidelity scoring of unlimited environments",
-      "A world built to your system",
-      "Signed reports with audit trail",
-    ],
-    cta: "BOOK A DEMO",
-    demo: true,
-    ticks: false,
-  },
+  { key: "free", name: "FREE", price: "$0", cta: "START FREE", signIn: true },
+  { key: "team", name: "TEAM", price: "$400", per: "/mo", cta: "UPGRADE NOW", checkout: true },
+  { key: "growth", name: "GROWTH", price: "$2,000", per: "/mo", cta: "UPGRADE NOW", checkout: true },
+  { key: "enterprise", name: "ENTERPRISE", price: "Custom", cta: "UPGRADE NOW", checkout: true },
 ];
+
+// One row per capability, one column per tier, in tier order.
+export const featureRows = [
+  ["WORLDS", "1", "3", "10", "All, plus custom built"],
+  ["UPDATE CHANNEL", "Stable", "Stable + daily", "Stable + daily", "Stable + daily + LTS"],
+  ["ACTION ACCURACY REPORTS", "Signed and full", "Signed and full", "Signed and full", "Signed and full"],
+  ["SEATS", "One", "Unlimited", "Unlimited", "Unlimited"],
+  ["SEED IMPORT", "One account", "One", "Multiple, production scale", "Unlimited"],
+  ["FIDELITY SCORING OF YOUR ENVIRONMENT", "None", "None", "One", "Unlimited"],
+  ["DEPLOYMENT", "Local + CI", "Local + CI", "Local + CI", "Shared VPC server"],
+];
+
+export const reportsNote =
+  "Action Accuracy Reports are signed and complete on every tier, the free one included.";

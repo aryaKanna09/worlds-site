@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { SPHERE } from "../data/ui.js";
 import { isLand } from "../data/earth.js";
-import { mulberry32 } from "../data/scenarios.js";
+import { mulberry32 } from "../lib/prng.js";
 
 // Point-cloud Earth: orange dots on black. Land is dense and bright, ocean
 // sparse and dim; same accent color throughout, only density/size/alpha vary.

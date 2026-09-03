@@ -1,5 +1,9 @@
 import { Link } from "react-router-dom";
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
+import { hasClerk } from "../lib/clerk.jsx";
 import spartaLogo from "../assets/sparta-logo.svg";
+
+const navLink = "label-mono text-xs text-gray-mid hover:text-fg";
 
 export default function Header() {
   return (
@@ -12,12 +16,30 @@ export default function Header() {
           <span className="label-mono text-sm leading-none text-accent">WORLDS</span>
         </Link>
         <nav className="flex items-center gap-5">
-          <Link to="/catalog" className="label-mono text-xs text-gray-mid hover:text-fg">
+          <Link to="/catalog" className={navLink}>
             CATALOG
           </Link>
-          <Link to="/pricing" className="label-mono text-xs text-gray-mid hover:text-fg">
+          <Link to="/pricing" className={`${navLink} hidden sm:inline`}>
             PRICING
           </Link>
+          {hasClerk ? (
+            <>
+              <SignedOut>
+                <Link to="/sign-in" className={navLink}>
+                  SIGN IN
+                </Link>
+              </SignedOut>
+              <SignedIn>
+                <Link to="/dashboard" className={navLink}>
+                  DASHBOARD
+                </Link>
+              </SignedIn>
+            </>
+          ) : (
+            <Link to="/sign-in" className={navLink}>
+              SIGN IN
+            </Link>
+          )}
         </nav>
       </div>
     </header>

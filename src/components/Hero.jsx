@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Sphere from "./Sphere.jsx";
 import LogoWall from "./LogoWall.jsx";
+import { track } from "../lib/analytics.ts";
 import { Micro, ctaPrimary } from "./ui.jsx";
 
 export default function Hero() {
@@ -25,11 +26,15 @@ export default function Hero() {
               you can hand to a buyer, an auditor, or your board.
             </p>
             <div className="mt-8">
-              <Link to="/catalog" className={ctaPrimary}>
-                BROWSE THE WORLD CATALOG
+              <Link
+                to="/sign-in"
+                onClick={() => track("cta_test_your_agent_clicked", { source: "hero" })}
+                className={ctaPrimary}
+              >
+                TEST YOUR OWN AGENT
               </Link>
               <p className="mt-4 font-mono text-sm tracking-[0.08em] text-gray-mid">
-                <span className="select-none">$ </span>pip install worlds
+                Free. One world. Your rules.
               </p>
             </div>
           </div>

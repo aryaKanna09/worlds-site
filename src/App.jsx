@@ -1,11 +1,24 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useAuth } from "@clerk/clerk-react";
+import { MaybeClerkProvider, hasClerk } from "./lib/clerk.jsx";
+import { initAnalytics, identify } from "./lib/analytics.ts";
+import { apiFetch } from "./lib/api.js";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import InstallModal from "./components/InstallModal.jsx";
 import Home from "./pages/Home.jsx";
 import Catalog from "./pages/Catalog.jsx";
 import PricingPage from "./pages/PricingPage.jsx";
+import SignInPage from "./pages/SignInPage.jsx";
+import SignUpPage from "./pages/SignUpPage.jsx";
+import Welcome from "./pages/Welcome.jsx";
+import Overview from "./pages/Overview.jsx";
+import Claim from "./pages/Claim.jsx";
+import Start from "./pages/Start.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import AdminClaims from "./pages/AdminClaims.jsx";
+import WorldFeed from "./pages/WorldFeed.jsx";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -15,8 +28,29 @@ function ScrollToTop() {
   return null;
 }
 
+// Identifies the PostHog person with the account id once signed in.
+function IdentifyOnAuth() {
+  const { isSignedIn, getToken } = useAuth();
+  useEffect(() => {
+    if (!isSignedIn) return;
+    apiFetch("/api/accounts/me", { getToken })
+      .then((d) =>
+        identify(d.account.id, {
+          role_answer: d.account.roleAnswer,
+          vertical_answer: d.account.verticalAnswer,
+        })
+      )
+      .catch(() => {});
+  }, [isSignedIn, getToken]);
+  return null;
+}
+
 export default function App() {
   const [installWorld, setInstallWorld] = useState(null);
+
+  useEffect(() => {
+    initAnalytics();
+  }, []);
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -29,18 +63,30 @@ export default function App() {
   const openInstall = (world) => setInstallWorld(world);
 
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <div className="min-h-screen bg-bg text-fg">
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home onInstall={openInstall} />} />
-          <Route path="/catalog" element={<Catalog onInstall={openInstall} />} />
-          <Route path="/pricing" element={<PricingPage />} />
-        </Routes>
-        <Footer />
-        {installWorld && <InstallModal world={installWorld} onClose={() => setInstallWorld(null)} />}
-      </div>
-    </BrowserRouter>
+    <MaybeClerkProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        {hasClerk && <IdentifyOnAuth />}
+        <div className="min-h-screen bg-bg text-fg">
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home onInstall={openInstall} />} />
+            <Route path="/catalog" element={<Catalog onInstall={openInstall} />} />
+            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/sign-in/*" element={<SignInPage />} />
+            <Route path="/sign-up/*" element={<SignUpPage />} />
+            <Route path="/welcome" element={<Welcome />} />
+            <Route path="/overview" element={<Overview />} />
+            <Route path="/claim" element={<Claim />} />
+            <Route path="/start" element={<Start />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/admin/claims" element={<AdminClaims />} />
+            <Route path="/worlds/:slug" element={<WorldFeed />} />
+          </Routes>
+          <Footer />
+          {installWorld && <InstallModal world={installWorld} onClose={() => setInstallWorld(null)} />}
+        </div>
+      </BrowserRouter>
+    </MaybeClerkProvider>
   );
 }

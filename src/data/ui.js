@@ -3,6 +3,13 @@ export const COPYRIGHT_YEAR = 2026;
 export const COPY_FLASH_MS = 1500;
 export const FAVICON_SIZE = 128;
 
+// Walkthrough replay pacing: per line stream cadence and the fleet log length.
+export const WALKTHROUGH = {
+  tickMs: 40,
+  fleetTickMs: 40,
+  fleetLines: 100,
+};
+
 // Homepage logo wall rotation: fixed slots cycle through the full catalog,
 // staggered so the row never blinks at once. Paused on hover; static under
 // reduced motion.

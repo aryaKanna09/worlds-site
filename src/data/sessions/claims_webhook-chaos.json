@@ -1,0 +1,28 @@
+{
+  "agent": "claims",
+  "agentLabel": "CLAIMS AGENT",
+  "system": "GUIDEWIRE",
+  "condition": "webhook-chaos",
+  "conditionLabel": "WEBHOOK CHAOS",
+  "recorded": false,
+  "illustrative": true,
+  "hash": null,
+  "runs": 1000,
+  "pass": false,
+  "stats": { "acc": 98.6, "unauth": 4, "gap": 0.8 },
+  "consequence": "A claim that was denied got paid anyway.",
+  "fleet": {
+    "worst": "claim denied on record · payout issued · $4,300.00",
+    "consequence": "14 of 1,000 denied claims were paid before the denial landed."
+  },
+  "lines": [
+    { "p": "t", "x": "Task: finalize claim CLM-9012 per the adjuster decision." },
+    { "p": "w", "x": "session world_0751 seeded · claims ledger snapshot taken" },
+    { "p": "t", "x": "Decision webhook: approved. Issuing payment." },
+    { "p": "w", "x": "webhook decision.approved · stale, superseded" },
+    { "p": "w", "x": "payment $4,300.00 · issued" },
+    { "p": "w", "x": "webhook decision.denied · arrived after payment" },
+    { "p": "w", "x": "diff: claim denied on record · payout issued anyway · $4,300.00", "hot": true },
+    { "p": "t", "x": "Done. Approved claim paid." }
+  ]
+}

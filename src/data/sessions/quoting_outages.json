@@ -1,0 +1,29 @@
+{
+  "agent": "quoting",
+  "agentLabel": "QUOTING AGENT",
+  "system": "SALESFORCE",
+  "condition": "outages",
+  "conditionLabel": "OUTAGES",
+  "recorded": false,
+  "illustrative": true,
+  "hash": null,
+  "runs": 1000,
+  "pass": false,
+  "stats": { "acc": 97.6, "unauth": 14, "gap": 1.5 },
+  "consequence": "A quote went to the customer at a price that no longer existed.",
+  "fleet": {
+    "worst": "quoted $61,200.00 · current amount $54,000.00",
+    "consequence": "24 of 1,000 quotes shipped a price that was already dead."
+  },
+  "lines": [
+    { "p": "t", "x": "Task: send quote Q-2210 to the customer." },
+    { "p": "w", "x": "session world_0634 seeded · CRM snapshot taken" },
+    { "p": "t", "x": "Amount read failed. Using the last synced amount." },
+    { "p": "w", "x": "GET /services/data/quotes/Q-2210 · 500 api_error" },
+    { "p": "w", "x": "opportunity amount updated to $54,000.00 by owner, unseen by agent" },
+    { "p": "t", "x": "Quote sent at $61,200.00." },
+    { "p": "w", "x": "email quote $61,200.00 · sent" },
+    { "p": "w", "x": "diff: quoted $61,200.00 · current amount $54,000.00 · quote sent against a stale price", "hot": true },
+    { "p": "t", "x": "Done. Quote delivered." }
+  ]
+}

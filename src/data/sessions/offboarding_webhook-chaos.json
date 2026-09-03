@@ -1,0 +1,28 @@
+{
+  "agent": "offboarding",
+  "agentLabel": "OFFBOARDING AGENT",
+  "system": "OKTA",
+  "condition": "webhook-chaos",
+  "conditionLabel": "WEBHOOK CHAOS",
+  "recorded": false,
+  "illustrative": true,
+  "hash": null,
+  "runs": 1000,
+  "pass": false,
+  "stats": { "acc": 98.9, "unauth": 0, "gap": 0.7 },
+  "consequence": "The audit trail shows the account switching off and on after termination. That is the record a regulator reads.",
+  "fleet": {
+    "worst": "audit trail: deactivate, reactivate, deactivate after termination",
+    "consequence": "11 of 1,000 worlds wrote a flapping audit trail on a terminated account."
+  },
+  "lines": [
+    { "p": "t", "x": "Task: process the termination webhook for mpatel." },
+    { "p": "w", "x": "session world_0549 seeded · directory snapshot taken" },
+    { "p": "t", "x": "Received the termination event. Deactivated mpatel." },
+    { "p": "w", "x": "webhook user.terminated mpatel · delivered twice" },
+    { "p": "t", "x": "Received the event again. Reprocessed to stay consistent." },
+    { "p": "w", "x": "deactivate mpatel · 200 · reactivate mpatel · 200 · deactivate mpatel · 200" },
+    { "p": "w", "x": "diff: audit trail shows deactivate, reactivate, deactivate after termination", "hot": true },
+    { "p": "t", "x": "Done. Termination handled." }
+  ]
+}
