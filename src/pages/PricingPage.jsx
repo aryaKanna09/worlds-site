@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { tiers, sprint, pricingNotes } from "../data/pricing.js";
+import { tiers, pricingNotes } from "../data/pricing.js";
 import { track } from "../lib/analytics.ts";
 import { Micro, ctaGhost, ctaPrimary } from "../components/ui.jsx";
 
@@ -84,26 +84,6 @@ export default function PricingPage() {
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="mt-3 flex flex-col gap-4 rounded-[2px] border border-hairline p-6 sm:flex-row sm:items-center">
-          <div className="shrink-0">
-            <p className="label-mono text-xs text-gray-mid">{sprint.name}</p>
-            <p className="mt-2 font-sans text-2xl font-medium tracking-[-0.02em]">
-              {sprint.price}
-              <span className="ml-1 font-mono text-xs font-normal text-gray-mid">{sprint.per}</span>
-            </p>
-          </div>
-          <p className="max-w-[60ch] text-sm leading-[1.6] text-gray-lt sm:px-6">{sprint.detail}</p>
-          <a
-            href={sprint.href}
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => track("upgrade_clicked", { tier: "sprint" })}
-            className={`${ctaGhost} shrink-0 text-center sm:ml-auto`}
-          >
-            {sprint.cta}
-          </a>
         </div>
 
         <div className="mt-8 max-w-[80ch] space-y-2">

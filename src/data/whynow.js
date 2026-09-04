@@ -22,6 +22,6 @@ export const whynow = [
   },
   {
     kicker: true,
-    text: "The buying committee for agents moved from engineering to security and compliance, and they need an artifact nobody produces today. Worlds produces it, runs inside your environment, and is checkable without trusting us.",
+    text: "Compliance signs off on agents now, not engineering. They need evidence nobody produces yet. Worlds produces it, in your environment, checkable without trusting us.",
   },
 ];

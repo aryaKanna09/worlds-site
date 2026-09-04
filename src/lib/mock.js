@@ -67,7 +67,34 @@ export const signIn = (provider, email) =>
     claim: state?.claim || null,
     key: state?.key || issuePlaceholderKey(),
     keySeen: state?.keySeen || false,
+    // Named API keys: one account, unlimited keys, labels supplied by the
+    // user. Every account starts with one so the CLI command always renders.
+    apiKeys: state?.apiKeys || [{ label: "default", last4: randomChars(4), createdAt: Date.now() }],
+    records: state?.records || [],
   });
+
+// Creates a named key and returns the full token. The token is shown once at
+// creation and never stored in full; only the label and last four persist.
+export const createApiKey = (label) => {
+  const token = `wrld_sk_${randomChars(40)}`;
+  const keys = [...(state?.apiKeys || []), { label, last4: token.slice(-4), createdAt: Date.now() }];
+  save({ ...(state || {}), apiKeys: keys });
+  return token;
+};
+
+// Records a signed digest. Only the digest ever reaches this store; the file
+// contents are hashed in the browser and never transmitted. A new signature
+// for the same file name supersedes earlier ones, standing in for the agent
+// build or model version changing.
+export const addSignedRecord = ({ digest, keyLabel, name }) => {
+  const prior = (state?.records || []).map((r) =>
+    r.name === name ? { ...r, status: "superseded" } : r
+  );
+  save({
+    ...(state || {}),
+    records: [{ digest, keyLabel, name, signedAt: Date.now(), status: "valid" }, ...prior],
+  });
+};
 
 export const signOut = () => save(null);
 

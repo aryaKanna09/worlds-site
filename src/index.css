@@ -7,6 +7,8 @@
   --color-gray-mid: #7a7f7f;
   --color-gray-lt: #d4d4d4;
   --color-hairline: rgba(212, 212, 212, 0.15);
+  /* Semantic destructive red, deliberately distinct from the brand orange. */
+  --color-danger: #e5484d;
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Space Mono", ui-monospace, monospace;
 }

@@ -1,9 +1,9 @@
 {
-  "agentBuild": "support_agent v3.2",
-  "model": null,
+  "agentBuild": "support_agent v3.2 · a41f0c9",
+  "model": "claude-opus-5 · 2026.08.14",
   "environment": "Stripe world",
-  "snapshot": null,
-  "scenarioSet": null,
+  "snapshot": "7c2e91b",
+  "scenarioSet": "refunds-and-disputes v4",
   "runs": 10000,
   "completion": "99.6%  (CI 99.4 to 99.8)",
   "stateIntegrity": "CLEAN, whole run",

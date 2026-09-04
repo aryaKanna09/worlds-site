@@ -57,8 +57,7 @@ export const tiers = [
   {
     key: "enterprise",
     name: "ENTERPRISE",
-    price: "$75,000 to $150,000",
-    per: "/yr",
+    price: "Custom",
     cta: "CHAT WITH OUR TEAM",
     href: "https://cal.com/usesparta",
     description: "Unlimited custom worlds, validation exports, SLA and dedicated support.",
@@ -73,18 +72,6 @@ export const tiers = [
     ],
   },
 ];
-
-// Fixed scope engagement listed publicly; it sits between Growth and
-// Enterprise and is credited in full against Enterprise.
-export const sprint = {
-  name: "ACCEPTANCE SPRINT",
-  price: "$25,000 to $40,000",
-  per: "fixed",
-  cta: "CHAT WITH OUR TEAM",
-  href: "https://cal.com/usesparta",
-  detail:
-    "One world, one agent, one signed record, one validation export. Credited in full against Enterprise. Enterprise procurement does not buy vibes; this is how it approves us without making a platform decision.",
-};
 
 // Lines under the tier grid. The first is why runs are never metered.
 export const pricingNotes = [
