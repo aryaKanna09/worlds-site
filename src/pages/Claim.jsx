@@ -1,34 +1,21 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { SignedIn, SignedOut, RedirectToSignIn, useAuth } from "@clerk/clerk-react";
+import { useMemo, useRef, useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { worlds, CATEGORIES } from "../data/worlds.js";
 import WorldLogo from "../components/WorldLogo.jsx";
-import { apiFetch } from "../lib/api.js";
+import { update, useMockSession, issuePlaceholderKey } from "../lib/mock.js";
 import { track } from "../lib/analytics.ts";
-import { hasClerk, AuthPending } from "../lib/clerk.jsx";
 import { Micro, ctaGhost, ctaPrimary } from "../components/ui.jsx";
 
 const SORTED = [...worlds].sort((a, b) => (b.free ? 1 : 0) - (a.free ? 1 : 0) || a.name.localeCompare(b.name));
 const CHIPS = ["ALL", ...CATEGORIES];
 
-function ClaimInner() {
+export default function Claim() {
   const navigate = useNavigate();
-  const { getToken } = useAuth();
-  const [params] = useSearchParams();
+  const session = useMockSession();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("ALL");
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [existing, setExisting] = useState(null);
-  const [claiming, setClaiming] = useState(null);
-  const [provisioned, setProvisioned] = useState(null);
-  const [error, setError] = useState(null);
   const searchRef = useRef(null);
-
-  useEffect(() => {
-    apiFetch("/api/claims", { getToken })
-      .then((d) => setExisting(d.claims?.[0] || null))
-      .catch(() => setExisting(null));
-  }, [getToken]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -39,37 +26,31 @@ function ClaimInner() {
     );
   }, [query, category]);
 
-  const claim = async (world) => {
-    setClaiming(world.id);
-    setError(null);
-    try {
-      const body = { world: world.id };
-      const invitedBy = params.get("invited_by");
-      if (invitedBy) body.invited_by = invitedBy;
-      const result = await apiFetch("/api/claims", { getToken, method: "POST", body });
-      track("world_claimed", { world: world.id, live: result.status === "active" });
-      if (result.status === "active") {
-        track("key_issued", { tier: result.key?.tier || "free" });
-        navigate("/start");
-      } else {
-        track("provisioning_shown", { world: world.id });
-        setProvisioned(result.worldName || world.name);
-        setExisting(result.claim);
-      }
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setClaiming(null);
+  if (!session?.signedIn) return <Navigate to="/sign-in" replace />;
+
+  const claim = (world) => {
+    const live = world.id === "stripe";
+    track("world_claimed", { world: world.id, live });
+    if (live) {
+      update({
+        claim: { world: world.id, name: world.name, status: "active" },
+        key: issuePlaceholderKey(session.key?.channel || "stable"),
+        keySeen: false,
+      });
+      track("key_issued", { tier: "free" });
+      navigate("/start");
+    } else {
+      track("provisioning_shown", { world: world.id });
+      update({ claim: { world: world.id, name: world.name, status: "provisioning" } });
     }
   };
 
-  if (provisioned || (existing && existing.status === "provisioning")) {
-    const name = provisioned || existing.worldSlug;
+  if (session.claim?.status === "provisioning") {
     return (
       <main className="mx-auto max-w-[1120px] px-4 py-16 sm:px-6 md:py-24">
         <Micro>YOUR WORLD</Micro>
         <h1 className="mt-3 max-w-[720px] font-sans text-2xl font-medium tracking-[-0.02em] sm:text-3xl">
-          Your {name} world is being prepared. You'll have it shortly.
+          Your {session.claim.name} world is being prepared. You'll have it shortly.
         </h1>
         <p className="mt-4 max-w-[60ch] text-base leading-[1.6] text-gray-lt">
           Meanwhile, the demo and walkthrough work right now.
@@ -86,12 +67,12 @@ function ClaimInner() {
     );
   }
 
-  if (existing && existing.status === "active") {
+  if (session.claim?.status === "active") {
     return (
       <main className="mx-auto max-w-[1120px] px-4 py-16 sm:px-6 md:py-24">
         <Micro>YOUR WORLD</Micro>
         <h1 className="mt-3 font-sans text-2xl font-medium tracking-[-0.02em] sm:text-3xl">
-          You have the {existing.worldSlug} world.
+          You have the {session.claim.name} world.
         </h1>
         <p className="mt-4 max-w-[60ch] text-base leading-[1.6] text-gray-lt">
           The free tier includes one world. Unlock more from the pricing page.
@@ -116,7 +97,6 @@ function ClaimInner() {
           Pick the system your agent touches.
         </h1>
         <p className="label-mono mt-5 text-xs text-gray-mid">ONE FREE CLAIM PER ACCOUNT</p>
-        {error && <p className="label-mono mt-3 text-xs text-accent">{error.toUpperCase()}</p>}
       </div>
 
       <div className="mx-auto max-w-[1120px] px-4 pb-16 sm:px-6 md:pb-24">
@@ -176,13 +156,8 @@ function ClaimInner() {
                     {world.description}
                   </p>
                   <div className="mt-auto flex justify-end pt-4">
-                    <button
-                      type="button"
-                      disabled={claiming !== null}
-                      onClick={() => claim(world)}
-                      className={ctaGhost}
-                    >
-                      {claiming === world.id ? "CLAIMING" : "CLAIM"}
+                    <button type="button" onClick={() => claim(world)} className={ctaGhost}>
+                      CLAIM
                     </button>
                   </div>
                 </article>
@@ -192,19 +167,5 @@ function ClaimInner() {
         </div>
       </div>
     </main>
-  );
-}
-
-export default function Claim() {
-  if (!hasClerk) return <AuthPending />;
-  return (
-    <>
-      <SignedOut>
-        <RedirectToSignIn />
-      </SignedOut>
-      <SignedIn>
-        <ClaimInner />
-      </SignedIn>
-    </>
   );
 }

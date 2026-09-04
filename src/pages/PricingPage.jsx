@@ -11,19 +11,9 @@ export default function PricingPage() {
     track("pricing_viewed", {});
   }, []);
 
-  const upgrade = async (tier) => {
+  const upgrade = (tier) => {
     track("upgrade_clicked", { tier: tier.key });
-    try {
-      const res = await fetch("/api/billing/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tier: tier.key }),
-      });
-      const data = await res.json().catch(() => ({}));
-      setFallback(data.fallback || "https://cal.com/usesparta");
-    } catch {
-      setFallback("https://cal.com/usesparta");
-    }
+    setFallback("https://cal.com/usesparta");
   };
 
   return (

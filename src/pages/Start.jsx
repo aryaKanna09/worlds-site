@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { SignedIn, SignedOut, RedirectToSignIn, useAuth } from "@clerk/clerk-react";
-import { apiFetch } from "../lib/api.js";
+import { Link, Navigate } from "react-router-dom";
+import { getSession, update, useMockSession, issuePlaceholderKey } from "../lib/mock.js";
 import { track } from "../lib/analytics.ts";
 import { COPY_FLASH_MS } from "../data/ui.js";
-import { hasClerk, AuthPending } from "../lib/clerk.jsx";
 import { Micro, ctaGhost } from "../components/ui.jsx";
 
-function CopyBlock({ text, onCopy, mono = true }) {
+function CopyBlock({ text, onCopy }) {
   const [copied, setCopied] = useState(false);
   const copy = () => {
     navigator.clipboard?.writeText(text).then(() => {
@@ -17,7 +16,7 @@ function CopyBlock({ text, onCopy, mono = true }) {
   };
   return (
     <div className="flex items-center justify-between gap-3 rounded-[2px] border border-hairline bg-[#0a0a0a] px-4 py-3">
-      <code className={`min-w-0 truncate ${mono ? "font-mono" : ""} text-sm text-gray-lt`}>{text}</code>
+      <code className="min-w-0 truncate font-mono text-sm text-gray-lt">{text}</code>
       <button
         type="button"
         onClick={copy}
@@ -29,39 +28,26 @@ function CopyBlock({ text, onCopy, mono = true }) {
   );
 }
 
-function StartInner() {
-  const { getToken } = useAuth();
-  const [me, setMe] = useState(null);
-  const [key, setKey] = useState(null);
-  const [masked, setMasked] = useState(false);
-  const [renewing, setRenewing] = useState(false);
+export default function Start() {
+  const session = useMockSession();
+  // Shown in full on the first visit, masked on later ones.
+  const [masked, setMasked] = useState(() => Boolean(getSession()?.keySeen));
 
   useEffect(() => {
-    apiFetch("/api/accounts/me", { getToken }).then(setMe).catch(() => setMe({ error: true }));
-    apiFetch("/api/keys/current", { getToken })
-      .then((d) => {
-        setKey(d.key);
-        const seen = localStorage.getItem(`worlds_key_seen_${d.key.tokenId}`);
-        if (seen) setMasked(true);
-        else localStorage.setItem(`worlds_key_seen_${d.key.tokenId}`, "1");
-      })
-      .catch(() => setKey(null));
-  }, [getToken]);
+    if (session?.signedIn && session.key && !session.keySeen) update({ keySeen: true });
+  }, [session?.key?.token]);
 
-  const renew = async () => {
-    setRenewing(true);
-    try {
-      const d = await apiFetch("/api/keys/renew", { getToken, method: "POST" });
-      setKey(d.key);
-      setMasked(false);
-      localStorage.setItem(`worlds_key_seen_${d.key.tokenId}`, "1");
-      track("key_renewed", { tier: d.key.tier });
-    } finally {
-      setRenewing(false);
-    }
+  if (!session?.signedIn) return <Navigate to="/sign-in" replace />;
+
+  const key = session.key;
+  const provisioning = session.claim?.status === "provisioning";
+
+  const renew = () => {
+    update({ key: issuePlaceholderKey(key?.channel || "stable"), keySeen: true });
+    setMasked(false);
+    track("key_renewed", { tier: "free" });
   };
 
-  const provisioning = me?.claim?.status === "provisioning";
   const displayToken = key ? (masked ? `${key.token.slice(0, 12)}············` : key.token) : null;
 
   return (
@@ -72,13 +58,7 @@ function StartInner() {
       </h1>
 
       <section className="mt-10 rounded-[2px] border border-hairline p-6 sm:p-8">
-        <button
-          type="button"
-          onClick={() => track("start_door_opened", { door: "demo" })}
-          className="label-mono text-xs text-fg"
-        >
-          01 · SEE IT CATCH A BUG
-        </button>
+        <p className="label-mono text-xs text-fg">01 · SEE IT CATCH A BUG</p>
         <p className="mt-3 max-w-[60ch] text-base leading-[1.6] text-gray-lt">
           Keyless. You'll watch a refund agent double refund a customer under rate limits, and the diff
           that catches it.
@@ -89,17 +69,11 @@ function StartInner() {
       </section>
 
       <section className="mt-6 rounded-[2px] border border-hairline p-6 sm:p-8">
-        <button
-          type="button"
-          onClick={() => track("start_door_opened", { door: "wire" })}
-          className="label-mono text-xs text-fg"
-        >
-          02 · WIRE YOUR AGENT
-        </button>
+        <p className="label-mono text-xs text-fg">02 · WIRE YOUR AGENT</p>
         {provisioning ? (
           <p className="mt-3 max-w-[60ch] text-base leading-[1.6] text-gray-lt">
-            Your {me?.world?.name || me?.claim?.worldSlug} world is being prepared. You'll have it
-            shortly. Door one works right now.
+            Your {session.claim.name} world is being prepared. You'll have it shortly. Door one works
+            right now.
           </p>
         ) : key ? (
           <>
@@ -109,8 +83,8 @@ function StartInner() {
             </div>
             <p className="label-mono mt-2 text-[10px] text-gray-mid">
               EXPIRES {new Date(key.expiresAt).toISOString().slice(0, 10)}
-              <button type="button" onClick={renew} disabled={renewing} className="ml-3 text-gray-lt hover:text-fg">
-                {renewing ? "RENEWING" : "RENEW"}
+              <button type="button" onClick={renew} className="ml-3 text-gray-lt hover:text-fg">
+                RENEW
               </button>
             </p>
             <div className="mt-4 max-w-md space-y-2">
@@ -127,23 +101,9 @@ function StartInner() {
         )}
       </section>
 
-      <a href="/dashboard" className={`${ctaGhost} mt-8 inline-block`}>
+      <Link to="/dashboard" className={`${ctaGhost} mt-8 inline-block`}>
         GO TO DASHBOARD
-      </a>
+      </Link>
     </main>
-  );
-}
-
-export default function Start() {
-  if (!hasClerk) return <AuthPending />;
-  return (
-    <>
-      <SignedOut>
-        <RedirectToSignIn />
-      </SignedOut>
-      <SignedIn>
-        <StartInner />
-      </SignedIn>
-    </>
   );
 }

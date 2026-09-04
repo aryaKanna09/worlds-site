@@ -1,9 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth, useUser } from "@clerk/clerk-react";
-import { apiFetch } from "../lib/api.js";
-import { track, identify } from "../lib/analytics.ts";
-import { hasClerk, AuthPending } from "../lib/clerk.jsx";
+import { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { update, useMockSession } from "../lib/mock.js";
+import { track } from "../lib/analytics.ts";
 import { Micro, ctaGhost } from "../components/ui.jsx";
 
 const ROLES = ["I BUILD AGENTS", "RISK OR COMPLIANCE", "LEADERSHIP", "JUST LOOKING"];
@@ -29,32 +27,16 @@ function Question({ label, options, onPick }) {
   );
 }
 
-function WelcomeInner() {
+export default function Welcome() {
   const navigate = useNavigate();
-  const { getToken } = useAuth();
-  const { user } = useUser();
+  const session = useMockSession();
   const [role, setRole] = useState(null);
-  const signupFired = useRef(false);
 
-  useEffect(() => {
-    if (!user || signupFired.current) return;
-    signupFired.current = true;
-    const provider = user.externalAccounts?.[0]?.provider || "email";
-    track("signup_completed", { provider });
-  }, [user]);
+  if (!session?.signedIn) return <Navigate to="/sign-in" replace />;
 
-  const finish = async (finalRole, vertical) => {
+  const finish = (finalRole, vertical) => {
     track("role_answered", { role: finalRole, vertical: vertical ?? null });
-    try {
-      const account = await apiFetch("/api/accounts/answers", {
-        getToken,
-        method: "POST",
-        body: { role: finalRole, vertical: vertical ?? null },
-      });
-      if (account?.id) identify(account.id, { role_answer: finalRole, vertical_answer: vertical ?? null });
-    } catch {
-      // Routing is a default, never a wall; continue even if the write fails.
-    }
+    update({ role: finalRole, vertical: vertical ?? null });
     navigate(finalRole === "I BUILD AGENTS" ? "/claim" : "/overview");
   };
 
@@ -66,10 +48,11 @@ function WelcomeInner() {
       </h1>
 
       {role === null ? (
-        <Question label="WHAT BRINGS YOU HERE" options={ROLES} onPick={(r) => {
-          if (r === "I BUILD AGENTS") setRole(r);
-          else finish(r, null);
-        }} />
+        <Question
+          label="WHAT BRINGS YOU HERE"
+          options={ROLES}
+          onPick={(r) => (r === "I BUILD AGENTS" ? setRole(r) : finish(r, null))}
+        />
       ) : (
         <Question label="WHAT DO YOUR AGENTS TOUCH" options={VERTICALS} onPick={(v) => finish(role, v)} />
       )}
@@ -79,9 +62,4 @@ function WelcomeInner() {
       </button>
     </main>
   );
-}
-
-export default function Welcome() {
-  if (!hasClerk) return <AuthPending />;
-  return <WelcomeInner />;
 }

@@ -31,8 +31,7 @@ try {
 const BANNED = [/certif/i, /waitlist/i, /on request/i, /coming soon/i, /\bbeta\b/i, /hosted worlds/i, /parallel fleets/i];
 const DASHES = /[–—]/;
 const sources = walk("src").filter((f) => /\.(jsx?|tsx?|json|css)$/.test(f));
-const apis = walk("api").filter((f) => /\.(mjs|js|ts)$/.test(f));
-for (const f of [...sources, ...apis, "index.html"]) {
+for (const f of [...sources, "index.html"]) {
   const body = readFileSync(f, "utf8");
   for (const re of BANNED) if (re.test(body)) failures.push(`banned term ${re} in ${f}`);
   if (DASHES.test(body)) failures.push(`em or en dash in ${f}`);

@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
-import { hasClerk } from "../lib/clerk.jsx";
+import { useMockSession } from "../lib/mock.js";
 import spartaLogo from "../assets/sparta-logo.svg";
 
 const navLink = "label-mono text-xs text-gray-mid hover:text-fg";
 
 export default function Header() {
+  const session = useMockSession();
   return (
     <header className="sticky top-0 z-40 border-b border-hairline bg-bg">
       <div className="mx-auto flex h-14 max-w-[1120px] items-center justify-between px-4 sm:px-6">
@@ -22,19 +22,10 @@ export default function Header() {
           <Link to="/pricing" className={`${navLink} hidden sm:inline`}>
             PRICING
           </Link>
-          {hasClerk ? (
-            <>
-              <SignedOut>
-                <Link to="/sign-in" className={navLink}>
-                  SIGN IN
-                </Link>
-              </SignedOut>
-              <SignedIn>
-                <Link to="/dashboard" className={navLink}>
-                  DASHBOARD
-                </Link>
-              </SignedIn>
-            </>
+          {session?.signedIn ? (
+            <Link to="/dashboard" className={navLink}>
+              DASHBOARD
+            </Link>
           ) : (
             <Link to="/sign-in" className={navLink}>
               SIGN IN
