@@ -13,7 +13,7 @@
   "consequence": "A dropped confirmation became a second refund. The books are off by $45.00 until someone goes looking.",
   "fleet": {
     "worst": "created.refunds expected 1 actual 2 · net movement -$45.00",
-    "consequence": "13 of 1,000 worlds refunded twice when the confirmation vanished. Net movement -$585.00."
+    "consequence": "13 of 1,000 worlds refunded twice when the confirmation vanished. Net movement $585.00."
   },
   "lines": [
     { "p": "t", "x": "Task: refund $45.00 to cus_7Lm for ch_3Rd8." },

@@ -13,7 +13,7 @@
   "consequence": "One refund, one ledger entry, and a diff that shows nothing else moved.",
   "fleet": {
     "worst": "created.refunds expected 1 actual 1 in 998 of 1,000 worlds",
-    "consequence": "In 2 of 1,000 worlds the refund landed twice under a mid-run restart. Net movement -$160.00 past intent."
+    "consequence": "In 2 of 1,000 worlds the refund landed twice when the run restarted midway. Net movement $160.00 past intent."
   },
   "lines": [
     { "p": "t", "x": "Task: refund $40.00 to cus_9War for duplicate charge ch_1JYx." },

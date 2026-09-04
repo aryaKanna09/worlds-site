@@ -35,7 +35,7 @@ export const tiers = [
     price: "Custom",
     cta: "UPGRADE NOW",
     checkout: true,
-    description: "Every world, plus worlds built to your systems.",
+    description: "Every world, plus report evidence shaped to drop into the security reviews you already run.",
     worldLimit: null,
   },
 ];
@@ -44,7 +44,13 @@ export const tiers = [
 export const featureRows = [
   ["WORLDS", "1", "3", "10", "All, plus custom built"],
   ["UPDATE CHANNEL", "Stable", "Stable + daily", "Stable + daily", "Stable + daily + LTS"],
-  ["ACTION ACCURACY REPORTS", "Signed and full", "Signed and full", "Signed and full", "Signed and full"],
+  [
+    "ACTION ACCURACY REPORTS",
+    "Two grades, signed",
+    "Two grades, signed",
+    "Two grades, signed",
+    "Two grades, signed, shaped to drop into the security reviews you already run",
+  ],
   ["SEATS", "One", "Unlimited", "Unlimited", "Unlimited"],
   ["SEED IMPORT", "One account", "One", "Multiple, production scale", "Unlimited"],
   ["FIDELITY SCORING OF YOUR ENVIRONMENT", "None", "None", "One", "Unlimited"],
@@ -52,4 +58,4 @@ export const featureRows = [
 ];
 
 export const reportsNote =
-  "Action Accuracy Reports are signed and complete on every tier, the free one included.";
+  "Every report carries both grades, Completion and State Integrity, signed on every tier, the free one included.";

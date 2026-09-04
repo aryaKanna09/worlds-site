@@ -1,10 +1,11 @@
 import sampleReport from "../data/sampleReport.json";
 import ReportView from "./ReportView.jsx";
+import Worlds from "./Worlds.jsx";
 import { Section, Micro, H2 } from "./ui.jsx";
 
 const LIST = [
-  ["POLICY COVERAGE", "every refund limit, discount cap, access rule, and approval threshold encoded as a test"],
-  ["VERSION HISTORY", "which agent versions were run, which regressed, and on what"],
+  ["COMPLETION", "did the agent finish the task it was given"],
+  ["STATE INTEGRITY", "did it leave the environment correct, or did it break something on the way"],
   ["AUDIT TRAIL", "seed, script, and diff for every run, exportable"],
 ];
 
@@ -18,9 +19,14 @@ export default function Report() {
         <ReportView report={sampleReport} watermark="SAMPLE" />
         <div className="flex flex-col">
           <p className="max-w-[480px] text-lg leading-[1.6] text-gray-lt">
-            Every run is reproducible from a seed and a script. Every number comes from the world's final
-            state, never from the agent's own account of itself. Hand it to your customer, your insurer, or
-            your regulator.
+            Every run produces two grades. A single pass rate hides the failure that matters most: an
+            agent that reports success while corrupting state passes most tests and fails in production.
+            State Integrity covers the whole run, not the final snapshot. Every write, every call, every
+            record the agent touched and then tidied up. Your CI cannot run your suite against real
+            Stripe or real Salesforce, and a green check is written for your team. <Worlds /> runs your
+            agent against a full replica of the systems it touches and writes the evidence for the
+            buyer, the auditor, and the security reviewer. It claims one thing: this agent performed
+            this task under these conditions on this date. Independent evidence, repeatable on demand.
           </p>
           <div className="mt-8 divide-y divide-hairline border-y border-hairline">
             {LIST.map(([label, text]) => (

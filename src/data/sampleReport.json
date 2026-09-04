@@ -2,7 +2,8 @@
   "agent": "support_agent v3.2",
   "environmentName": "Stripe world",
   "runs": 10000,
-  "accuracy": "99.6%  (CI 99.4 to 99.8)",
+  "completion": "99.6%  (CI 99.4 to 99.8)",
+  "stateIntegrity": "CLEAN, whole run",
   "movement": [
     ["money", "$0.00"],
     ["access", "0 grants"],

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Ticks from "./Ticks.jsx";
 import { COPY_FLASH_MS } from "../data/ui.js";
 import { installSteps } from "../data/install.js";
+import { withWorlds } from "./Worlds.jsx";
 import { pipCommand } from "../data/worlds.js";
 
 // One modal for every world, parameterized by the world it installs.
@@ -85,7 +86,7 @@ export default function InstallModal({ world, onClose }) {
               </span>
               <div>
                 <p className="label-mono text-xs text-fg">{label}</p>
-                <p className="mt-1 text-sm leading-[1.6] text-gray-lt">{detail}</p>
+                <p className="mt-1 text-sm leading-[1.6] text-gray-lt">{withWorlds(detail)}</p>
               </div>
             </li>
           ))}

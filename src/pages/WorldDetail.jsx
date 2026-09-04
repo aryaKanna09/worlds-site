@@ -4,6 +4,7 @@ import { getSession, update, useMockSession, issuePlaceholderKey } from "../lib/
 import { track } from "../lib/analytics.ts";
 import { worlds } from "../data/worlds.js";
 import WorldLogo from "../components/WorldLogo.jsx";
+import Worlds from "../components/Worlds.jsx";
 import { COPY_FLASH_MS } from "../data/ui.js";
 import { Micro, ctaGhost } from "../components/ui.jsx";
 
@@ -103,7 +104,9 @@ export default function WorldDetail() {
           </div>
           <p className="mt-4 max-w-[60ch] text-base leading-[1.6] text-gray-lt">
             Everything else is generated. Two things are yours: confirm your agent reads the injected env
-            vars, and write your business rules as assertions.
+            vars, and write your business rules as assertions. Keep the harness you already have.{" "}
+            <Worlds /> installs as a fixture next to your existing tests, supplies the world, and signs
+            the result.
           </p>
         </section>
       ) : (

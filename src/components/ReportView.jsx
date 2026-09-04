@@ -2,8 +2,8 @@ import Ticks from "./Ticks.jsx";
 
 const Pending = () => <span className="text-gray-mid">PENDING</span>;
 
-// The one report renderer: the homepage sample, the overview sample, and the
-// real renderer all pass a report object through here.
+// The one report renderer. Every run carries two grades: Completion and
+// State Integrity.
 export default function ReportView({ report, watermark }) {
   return (
     <div className="relative rounded-[2px] border border-hairline p-6 font-mono text-sm leading-relaxed sm:p-8">
@@ -17,10 +17,12 @@ export default function ReportView({ report, watermark }) {
         <span className="text-gray-lt">{report.agent}</span>
         <span className="tracking-[0.08em] text-gray-mid">ENVIRONMENT</span>
         <span className="text-gray-lt">{report.environmentName}</span>
-        <span className="tracking-[0.08em] text-gray-mid">ACTION ACCURACY</span>
+        <span className="tracking-[0.08em] text-gray-mid">COMPLETION</span>
         <span className="text-gray-lt">
-          {report.accuracy} across {report.runs.toLocaleString("en-US")} runs
+          {report.completion} across {report.runs.toLocaleString("en-US")} runs
         </span>
+        <span className="tracking-[0.08em] text-gray-mid">STATE INTEGRITY</span>
+        <span className="text-gray-lt">{report.stateIntegrity}</span>
         <span className="tracking-[0.08em] text-gray-mid">MOVEMENT</span>
         <span className="text-gray-lt">
           {report.movement.map(([category, value]) => (

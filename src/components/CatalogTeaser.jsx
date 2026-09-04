@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { worlds, featuredWorlds } from "../data/worlds.js";
 import { COPY_FLASH_MS } from "../data/ui.js";
 import WorldCard from "./WorldCard.jsx";
+import Worlds from "./Worlds.jsx";
 import { Section, Micro, H2, ctaGhost } from "./ui.jsx";
 
 const STRIPE = worlds.find((w) => w.id === "stripe");
@@ -20,12 +21,14 @@ export default function CatalogTeaser({ onInstall }) {
   return (
     <Section>
       <Micro>WORLDS</Micro>
-      <H2>Environments we build ourselves.</H2>
+      <H2>Grades need ground truth. We build it.</H2>
       <p className="mt-8 max-w-[720px] text-lg leading-[1.6] text-gray-lt">
-        When there's no sandbox to point at, or the sandbox can't be reset, seeded, or broken on purpose,
-        worlds builds the environment. Every world is updated daily against the live service: patch
-        notes, API changes, and internal updates land in the world the same day, so your agent is graded
-        on today's rules, not last quarter's.
+        When there's no sandbox to point at, or the sandbox can't be reset, seeded, or broken on
+        purpose, <Worlds /> builds the environment. It does not predict production. It reproduces it: same
+        endpoints, same state, same failure modes, and the run is repeatable on demand, so a certificate
+        is a measurement with a date on it rather than a promise about the future. Every world is
+        updated daily against the live service: patch notes, API changes, and internal updates land in
+        the world the same day, so your agent is graded on today's rules, not last quarter's.
       </p>
       <p className="label-mono mt-4 text-xs text-gray-mid">
         <span className="text-accent">●</span> EVERY WORLD SYNCED DAILY

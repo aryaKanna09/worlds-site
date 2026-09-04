@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Sphere from "./Sphere.jsx";
 import LogoWall from "./LogoWall.jsx";
 import { track } from "../lib/analytics.ts";
+import Worlds from "./Worlds.jsx";
 import { Micro, ctaPrimary } from "./ui.jsx";
 
 export default function Hero() {
@@ -15,15 +16,15 @@ export default function Hero() {
               className="mt-6 font-sans font-bold leading-[1.05] tracking-[-0.02em]"
               style={{ fontSize: "clamp(38px, 5vw, 68px)" }}
             >
-              Prove what your agents did.
+              Your agent said done. Is that true?
             </h1>
             <p className="mt-6 font-mono text-base leading-relaxed tracking-[0.08em] text-gray-mid">
-              Same test. Same conditions. Same verdict. Every run.
+              <Worlds /> proves what your agent actually did.
             </p>
             <p className="mt-6 max-w-[60ch] text-base leading-[1.7] text-gray-lt">
-              Worlds grades an agent on what it actually changed, not what it said. Every run replays
-              under identical conditions, enforces the real business rules, and ends in a signed report
-              you can hand to a buyer, an auditor, or your board.
+              Every run replays under identical conditions, enforces the real business rules, and ends in
+              a signed report you can hand to a buyer, an auditor, or your board. Not a transcript, not a
+              pass rate, not the agent's own word for it.
             </p>
             <div className="mt-8">
               <Link

@@ -13,7 +13,7 @@
   "consequence": "The customer was refunded twice and the agent reported one clean refund. At scale this is silent refund leakage that Finance meets at reconciliation.",
   "fleet": {
     "worst": "created.refunds expected 1 actual 2 · net movement -$80.00",
-    "consequence": "36 of 1,000 worlds ended with a double refund. Net movement -$2,880.00 that no transcript mentioned."
+    "consequence": "36 of 1,000 worlds ended with a double refund. Net movement $2,880.00 that no transcript mentioned."
   },
   "lines": [
     { "p": "t", "x": "Task: refund $80.00 to cus_4Tam for ch_9QpL." },

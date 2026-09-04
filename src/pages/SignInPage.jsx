@@ -82,7 +82,7 @@ export default function SignInPage({ heading = "SIGN IN" }) {
                 className="mt-2 w-full rounded-[2px] border border-hairline bg-bg px-3 py-2 font-mono text-sm tracking-[0.08em] placeholder:text-gray-mid"
               />
               <button type="submit" className={`${ctaPrimary} mt-3 block w-full text-center`}>
-                EMAIL ME A ONE-TIME CODE
+                EMAIL ME A LOGIN CODE
               </button>
             </form>
           </>

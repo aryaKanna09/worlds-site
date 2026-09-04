@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { whynow } from "../data/whynow.js";
+import { withWorlds } from "./Worlds.jsx";
 import { Section, Micro } from "./ui.jsx";
 
 function useFadeIn() {
@@ -36,7 +37,7 @@ function FadeRow({ row }) {
       <div ref={ref} className={`${fade} relative py-10 pl-7`}>
         <span aria-hidden="true" className="absolute top-1/2 left-0 h-[22px] w-[10px] -translate-y-1/2 bg-accent" />
         <p className="max-w-[720px] font-sans text-xl leading-snug font-medium text-fg sm:text-2xl">
-          {row.text}
+          {withWorlds(row.text)}
         </p>
       </div>
     );

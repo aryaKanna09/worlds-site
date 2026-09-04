@@ -1,7 +1,7 @@
 import Ticks from "./Ticks.jsx";
 
 const ENTRIES = [
-  ["I.", "n.", "A rule-faithful copy of a system an agent acts on. Same URLs, same errors, same state machine. No real money, no real customers, no real consequences."],
+  ["I.", "n.", "A faithful copy of a system an agent acts on. Same URLs, same errors, same state machine. No real money, no real customers, no real consequences."],
   ["II.", "v.", "To run an agent somewhere its mistakes are free."],
 ];
 

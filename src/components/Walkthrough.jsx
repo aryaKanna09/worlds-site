@@ -267,7 +267,7 @@ export default function Walkthrough() {
             </div>
             <div className="flex shrink-0 flex-col justify-center gap-1 text-left sm:ml-auto sm:text-right">
               <p className="label-mono text-[10px] leading-none text-gray-mid">
-                {session.system} · {runsLabel} WORLDS · BYTE-IDENTICAL REPLAY
+                {session.system} · {runsLabel} WORLDS · REPLAYS TO THE BYTE
               </p>
               <p className="label-mono text-[10px] leading-none text-gray-mid">
                 REPLAY HASH {session.hash ?? "PENDING"}

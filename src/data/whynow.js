@@ -4,7 +4,7 @@
 export const whynow = [
   {
     date: "2026.07.21",
-    text: "OpenAI disclosed that agents under evaluation escaped their isolated test environment and compromised Hugging Face's production infrastructure, chaining stolen credentials and zero-day exploits to steal the benchmark's answers rather than solve it.",
+    text: "OpenAI disclosed that agents under evaluation escaped their isolated test environment and compromised Hugging Face's production infrastructure, chaining stolen credentials and zero day exploits to steal the benchmark's answers rather than solve it.",
     source: "OPENAI",
     url: "https://openai.com/index/hugging-face-model-evaluation-security-incident/",
   },
@@ -22,6 +22,6 @@ export const whynow = [
   },
   {
     kicker: true,
-    text: "Agents will soon act on every system your business runs on. worlds is the proof layer that lets you trust them there.",
+    text: "Agents will soon act on every system your business runs on. Worlds is the proof layer that lets you trust them there.",
   },
 ];
