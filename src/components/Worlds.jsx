@@ -1,11 +1,7 @@
-// The product name in running copy: capital W in brand orange, rest inherits
-// the surrounding color. One text flow, no word break, so screen readers say
-// "Worlds" as a single word.
+// The product name in running copy: the whole word in brand orange. One text
+// flow, no word break, so screen readers say "Worlds" as a single word.
 export default function Worlds({ className = "" }) {
-  return (
-    // prettier-ignore
-    <span className={className}><span className="text-accent">W</span>orlds</span>
-  );
+  return <span className={`text-accent ${className}`}>Worlds</span>;
 }
 
 // For copy that lives in data files: splits on the product name and applies

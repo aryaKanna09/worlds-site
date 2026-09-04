@@ -22,14 +22,22 @@ export default function CatalogTeaser({ onInstall }) {
     <Section>
       <Micro>WORLDS</Micro>
       <H2>Grades need ground truth. We build it.</H2>
-      <p className="mt-8 max-w-[720px] text-lg leading-[1.6] text-gray-lt">
-        When there's no sandbox to point at, or the sandbox can't be reset, seeded, or broken on
-        purpose, <Worlds /> builds the environment. It does not predict production. It reproduces it: same
-        endpoints, same state, same failure modes, and the run is repeatable on demand, so a certificate
-        is a measurement with a date on it rather than a promise about the future. Every world is
-        updated daily against the live service: patch notes, API changes, and internal updates land in
-        the world the same day, so your agent is graded on today's rules, not last quarter's.
-      </p>
+      <div className="mt-8 max-w-[720px]">
+        <p className="text-lg leading-[1.6] text-gray-lt">
+          No sandbox to point at, or one that can't be reset, seeded, or broken on purpose?{" "}
+          <Worlds /> builds the environment.
+        </p>
+        <p className="mt-4 text-base leading-[1.6] text-gray-lt">
+          It doesn't predict production, it reproduces it: same endpoints, same state, same failure
+          modes, repeatable on demand. A certificate becomes a measurement with a date on it, not a
+          promise about the future.
+        </p>
+        <p className="mt-3 text-base leading-[1.6] text-gray-lt">
+          Every world updates daily against the live service, patch notes, API changes, and
+          internal updates land the same day, so your agent is graded on today's rules, not last
+          quarter's.
+        </p>
+      </div>
       <p className="label-mono mt-4 text-xs text-gray-mid">
         <span className="text-accent">●</span> EVERY WORLD SYNCED DAILY
       </p>

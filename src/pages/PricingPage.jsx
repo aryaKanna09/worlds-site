@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { tiers, featureRows, reportsNote } from "../data/pricing.js";
+import { tiers, reportsNote } from "../data/pricing.js";
 import { track } from "../lib/analytics.ts";
 import { Micro, ctaGhost, ctaPrimary } from "../components/ui.jsx";
 
@@ -24,7 +24,7 @@ export default function PricingPage() {
           One price per company.
         </h1>
         <p className="label-mono mt-4 text-xs text-gray-mid">
-          FLAT PER COMPANY. NO SEATS BILLED. NO USAGE BILLED.
+          FLAT PER COMPANY. NO USAGE BILLED.
         </p>
         <p className="mt-3 max-w-[60ch] text-base leading-[1.6] text-gray-lt">{reportsNote}</p>
         {fallback && (
@@ -36,70 +36,45 @@ export default function PricingPage() {
           </p>
         )}
 
-        <div className="mt-10 hidden lg:block">
-          <div className="grid grid-cols-5 border-y border-hairline">
-            <div className="p-4" />
-            {tiers.map((t) => (
-              <div key={t.key} className="border-l border-hairline p-4">
-                <p className="label-mono text-xs text-gray-mid">{t.name}</p>
-                <p className="mt-2 font-sans text-2xl font-medium tracking-[-0.02em]">
-                  {t.price}
-                  {t.per && <span className="ml-1 font-mono text-xs font-normal text-gray-mid">{t.per}</span>}
-                </p>
-              </div>
-            ))}
-            {featureRows.map(([label, ...cells]) => (
-              <div key={label} className="col-span-5 grid grid-cols-subgrid border-t border-hairline">
-                <p className="label-mono p-4 text-[10px] text-gray-mid">{label}</p>
-                {cells.map((c, i) => (
-                  <p key={i} className="border-l border-hairline p-4 text-sm leading-[1.5] text-gray-lt">
-                    {c}
-                  </p>
-                ))}
-              </div>
-            ))}
-            <div className="col-span-5 grid grid-cols-subgrid border-t border-hairline">
-              <div className="p-4" />
-              {tiers.map((t) => (
-                <div key={t.key} className="border-l border-hairline p-4">
-                  {t.signIn ? (
-                    <Link to="/sign-in" className={ctaPrimary}>
-                      {t.cta}
-                    </Link>
-                  ) : (
-                    <button type="button" onClick={() => upgrade(t)} className={ctaGhost}>
-                      {t.cta}
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:hidden">
-          {tiers.map((t, ti) => (
+        <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {tiers.map((t) => (
             <div key={t.key} className="flex flex-col rounded-[2px] border border-hairline p-6">
               <p className="label-mono text-xs text-gray-mid">{t.name}</p>
               <p className="mt-3 font-sans text-2xl font-medium tracking-[-0.02em]">
                 {t.price}
                 {t.per && <span className="ml-1 font-mono text-xs font-normal text-gray-mid">{t.per}</span>}
               </p>
-              <ul className="mt-5 space-y-2">
-                {featureRows.map(([label, ...cells]) => (
-                  <li key={label} className="text-sm leading-[1.5] text-gray-lt">
-                    <span className="label-mono block text-[10px] text-gray-mid">{label}</span>
-                    {cells[ti]}
+              <ul className="mt-5 space-y-2.5">
+                {t.features.map((f) => (
+                  <li key={f} className="text-sm leading-[1.5] text-gray-lt">
+                    {f}
                   </li>
                 ))}
               </ul>
+              {t.note && (
+                <p className="label-mono mt-4 text-[10px] leading-[1.6] text-gray-mid">{t.note}</p>
+              )}
               <div className="mt-auto pt-6">
                 {t.signIn ? (
                   <Link to="/sign-in" className={`${ctaPrimary} block w-full text-center`}>
                     {t.cta}
                   </Link>
+                ) : t.href ? (
+                  <a
+                    href={t.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => track("upgrade_clicked", { tier: t.key })}
+                    className={`${ctaGhost} block w-full text-center`}
+                  >
+                    {t.cta}
+                  </a>
                 ) : (
-                  <button type="button" onClick={() => upgrade(t)} className={`${ctaGhost} block w-full text-center`}>
+                  <button
+                    type="button"
+                    onClick={() => upgrade(t)}
+                    className={`${ctaGhost} block w-full text-center`}
+                  >
                     {t.cta}
                   </button>
                 )}
