@@ -253,18 +253,23 @@ export default function Walkthrough() {
         </div>
 
         <div className="sticky bottom-0 z-10 mt-4 border border-hairline bg-bg p-4 lg:static">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-baseline gap-4">
-              <span className={`font-sans text-[32px] leading-none font-bold tracking-[-0.02em] ${done ? (session.pass ? "text-fg" : "text-accent") : "text-gray-mid"}`}>
+          {/* One flex row, one shared vertical center line for every child. */}
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+            <div className="flex items-center gap-4">
+              <span className={`shrink-0 font-sans text-[32px] leading-none font-bold tracking-[-0.02em] ${done ? (session.pass ? "text-fg" : "text-accent") : "text-gray-mid"}`}>
                 {done ? (session.pass ? "PASS" : "FAIL") : "·"}
               </span>
-              {done && <p className="max-w-[52ch] text-sm leading-[1.5] text-gray-lt">{session.consequence}</p>}
+              {done && (
+                <p className="line-clamp-2 max-w-[46ch] text-sm leading-[1.4] text-gray-lt">
+                  {session.consequence}
+                </p>
+              )}
             </div>
-            <div className="shrink-0 text-left sm:text-right">
-              <p className="label-mono text-[10px] text-gray-mid">
+            <div className="flex shrink-0 flex-col justify-center gap-1 text-left sm:ml-auto sm:text-right">
+              <p className="label-mono text-[10px] leading-none text-gray-mid">
                 {session.system} · {runsLabel} WORLDS · BYTE-IDENTICAL REPLAY
               </p>
-              <p className="label-mono mt-1 text-[10px] text-gray-mid">
+              <p className="label-mono text-[10px] leading-none text-gray-mid">
                 REPLAY HASH {session.hash ?? "PENDING"}
               </p>
             </div>

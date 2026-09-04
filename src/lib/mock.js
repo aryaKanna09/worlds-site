@@ -62,11 +62,9 @@ export const signIn = (provider, email) =>
     signedIn: true,
     provider,
     email: email || "you@company.com",
-    role: null,
-    vertical: null,
-    claim: null,
-    key: issuePlaceholderKey(),
-    keySeen: false,
+    claim: state?.claim || null,
+    key: state?.key || issuePlaceholderKey(),
+    keySeen: state?.keySeen || false,
   });
 
 export const signOut = () => save(null);

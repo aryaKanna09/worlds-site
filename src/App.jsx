@@ -8,11 +8,8 @@ import Catalog from "./pages/Catalog.jsx";
 import PricingPage from "./pages/PricingPage.jsx";
 import SignInPage from "./pages/SignInPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
-import Welcome from "./pages/Welcome.jsx";
-import Overview from "./pages/Overview.jsx";
-import Claim from "./pages/Claim.jsx";
-import Start from "./pages/Start.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import WorldDetail from "./pages/WorldDetail.jsx";
 import AdminClaims from "./pages/AdminClaims.jsx";
 import WorldFeed from "./pages/WorldFeed.jsx";
 
@@ -48,11 +45,8 @@ export default function App() {
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/sign-up" element={<SignUpPage />} />
-          <Route path="/welcome" element={<Welcome />} />
-          <Route path="/overview" element={<Overview />} />
-          <Route path="/claim" element={<Claim />} />
-          <Route path="/start" element={<Start />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/worlds/:slug" element={<WorldDetail />} />
           <Route path="/admin/claims" element={<AdminClaims />} />
           <Route path="/worlds/:slug" element={<WorldFeed />} />
         </Routes>
