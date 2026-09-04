@@ -121,7 +121,13 @@ function CopyBtn({ text, onCopy, className = "" }) {
 function SignedRecords({ session }) {
   const keys = session.apiKeys || [];
   const records = session.records || [];
-  const [selected, setSelected] = useState(keys[0]?.label || "default");
+  // Defaults to the most recently used key (the one on the newest record),
+  // falling back to the first key on the account.
+  const [selected, setSelected] = useState(() => {
+    const lastUsed = records[0]?.keyLabel;
+    if (lastUsed && keys.some((k) => k.label === lastUsed)) return lastUsed;
+    return keys[0]?.label || "default";
+  });
   const [dragging, setDragging] = useState(false);
   const fileRef = useRef(null);
 
@@ -210,7 +216,7 @@ function SignedRecords({ session }) {
 
       {records.length ? (
         <div className="mt-6 divide-y divide-hairline border-y border-hairline">
-          <div className="hidden gap-4 py-2 sm:grid sm:grid-cols-[150px_100px_110px_110px_1fr]">
+          <div className="hidden gap-3 py-2 sm:grid sm:grid-cols-[128px_76px_80px_84px_1fr]">
             {["DIGEST", "SIGNED", "KEY", "STATUS", ""].map((h, i) => (
               <span key={i} className="label-mono text-[10px] text-gray-mid">
                 {h}
@@ -220,10 +226,10 @@ function SignedRecords({ session }) {
           {records.map((r) => (
             <div
               key={r.digest}
-              className="grid grid-cols-2 gap-2 py-3 font-mono text-xs sm:grid-cols-[150px_100px_110px_110px_1fr] sm:gap-4"
+              className="grid grid-cols-2 gap-2 py-3 font-mono text-xs sm:grid-cols-[128px_76px_80px_84px_1fr] sm:gap-3"
             >
               <span className="flex items-center gap-2 text-gray-lt">
-                <span className="truncate">{r.digest.slice(0, 12)}</span>
+                <span className="truncate">{r.digest.slice(0, 10)}</span>
                 <CopyBtn text={r.digest} onCopy={() => track("record_digest_copied", {})} />
               </span>
               <span className="text-gray-mid">{fmtDate(r.signedAt)}</span>
@@ -401,22 +407,89 @@ export default function Dashboard() {
     track("account_updated", { field });
   };
 
+  const atLimit = tier.worldLimit !== null && claimedCount >= tier.worldLimit;
+  const worldsCta = paid ? "FIND MORE WORLDS" : atLimit ? "BROWSE THE CATALOG" : "CLAIM YOUR WORLD";
+
   return (
     <main className="mx-auto max-w-[960px] px-4 py-16 sm:px-6 md:py-24">
       <div className="pb-8">
         <Micro>DASHBOARD</Micro>
-        <p className="mt-2 font-mono text-sm tracking-[0.02em] text-gray-mid">{session.email}</p>
       </div>
 
-      <section className="border-t border-hairline py-8">
+      {/* One flex container on mobile (order classes interleave the sections),
+          two independent columns on desktop via display: contents wrappers. */}
+      <div className="flex flex-col lg:grid lg:grid-cols-[380px_minmax(0,1fr)] lg:items-start lg:gap-12">
+        <div className="contents lg:block">
+          <section className="order-1 border-t border-hairline py-8 lg:order-none">
+            <p className="label-mono text-xs text-gray-mid">YOUR PLAN</p>
+            <p className="mt-4 font-sans text-3xl font-medium tracking-[-0.02em]">{tier.name}</p>
+            <p className="mt-2 max-w-[60ch] text-base leading-[1.6] text-gray-mid">{tier.description}</p>
+            {key && (
+              <p className="label-mono mt-5 text-[10px] text-gray-mid">
+                KEY EXPIRES{" "}
+                <span className={expiresSoon ? "text-accent" : undefined}>
+                  {new Date(key.expiresAt).toISOString().slice(0, 10)}
+                </span>
+                <button type="button" onClick={renew} className="ml-3 text-gray-lt hover:text-fg">
+                  RENEW
+                </button>
+              </p>
+            )}
+            <p className="label-mono mt-2 text-[10px] text-gray-mid">
+              {claimedCount} OF {limitLabel} WORLDS CLAIMED
+            </p>
+            {paid ? (
+              <a href="#account" className={`${ctaGhost} mt-6 inline-block`}>
+                MANAGE PLAN
+              </a>
+            ) : (
+              <Link to="/pricing" className={`${ctaGhost} mt-6 inline-block`}>
+                UPGRADE
+              </Link>
+            )}
+          </section>
+
+          <section id="account" className="order-5 border-t border-hairline py-8 lg:order-none">
+            <p className="label-mono text-xs text-gray-mid">ACCOUNT</p>
+            <div className="mt-2 divide-y divide-hairline">
+              <Row label="NAME" value={session.name} onSave={(v) => saveField("name", v)} />
+              <Row label="EMAIL" value={session.email} verify onSave={(v) => saveField("email", v)} />
+              <Row label="COMPANY" value={session.company} onSave={(v) => saveField("company", v)} />
+              <div className="flex flex-col gap-2 py-4 sm:flex-row sm:items-center sm:gap-6">
+                <span className="label-mono w-28 shrink-0 text-[10px] text-gray-mid">BILLING</span>
+                <span className="min-w-0 flex-1 font-mono text-sm text-gray-mid">
+                  No payment method on file
+                </span>
+                <a
+                  href="https://cal.com/usesparta"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="label-mono text-[10px] text-gray-mid hover:text-fg"
+                >
+                  SET UP BILLING
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <div className="order-6 flex flex-wrap items-center gap-4 border-t border-hairline py-8 lg:order-none">
+            <button type="button" onClick={out} className={ctaGhost}>
+              SIGN OUT
+            </button>
+            <DeleteAccount email={session.email} />
+          </div>
+        </div>
+
+        <div className="contents lg:block lg:min-w-0">
+          <section className="order-2 border-t border-hairline py-8 lg:order-none">
         <div className="flex items-center justify-between">
           <p className="label-mono text-xs text-gray-mid">YOUR WORLDS</p>
           <Link
             to="/catalog"
-            onClick={() => track("find_more_worlds_clicked", {})}
+            onClick={() => track("find_more_worlds_clicked", { label: worldsCta })}
             className={ctaGhost}
           >
-            FIND MORE WORLDS
+            {worldsCta}
           </Link>
         </div>
         {claim ? (
@@ -443,66 +516,14 @@ export default function Dashboard() {
         )}
       </section>
 
-      <section className="border-t border-hairline py-8">
-        <p className="label-mono text-xs text-gray-mid">YOUR PLAN</p>
-        <p className="mt-4 font-sans text-3xl font-medium tracking-[-0.02em]">{tier.name}</p>
-        <p className="mt-2 max-w-[60ch] text-base leading-[1.6] text-gray-mid">{tier.description}</p>
-        {key && (
-          <p className="label-mono mt-5 text-[10px] text-gray-mid">
-            KEY EXPIRES{" "}
-            <span className={expiresSoon ? "text-accent" : undefined}>
-              {new Date(key.expiresAt).toISOString().slice(0, 10)}
-            </span>
-            <button type="button" onClick={renew} className="ml-3 text-gray-lt hover:text-fg">
-              RENEW
-            </button>
-          </p>
-        )}
-        <p className="label-mono mt-2 text-[10px] text-gray-mid">
-          {claimedCount} OF {limitLabel} WORLDS CLAIMED
-        </p>
-        {paid ? (
-          <a href="#account" className={`${ctaGhost} mt-6 inline-block`}>
-            MANAGE PLAN
-          </a>
-        ) : (
-          <Link to="/pricing" className={`${ctaGhost} mt-6 inline-block`}>
-            UPGRADE
-          </Link>
-        )}
-      </section>
-
-      <SignedRecords session={session} />
-      <ApiKeys session={session} />
-
-      <section id="account" className="border-t border-hairline py-8">
-        <p className="label-mono text-xs text-gray-mid">ACCOUNT</p>
-        <div className="mt-2 divide-y divide-hairline">
-          <Row label="NAME" value={session.name} onSave={(v) => saveField("name", v)} />
-          <Row label="EMAIL" value={session.email} verify onSave={(v) => saveField("email", v)} />
-          <Row label="COMPANY" value={session.company} onSave={(v) => saveField("company", v)} />
-          <div className="flex flex-col gap-2 py-4 sm:flex-row sm:items-center sm:gap-6">
-            <span className="label-mono w-28 shrink-0 text-[10px] text-gray-mid">BILLING</span>
-            <span className="min-w-0 flex-1 font-mono text-sm text-gray-mid">
-              No payment method on file
-            </span>
-            <a
-              href="https://cal.com/usesparta"
-              target="_blank"
-              rel="noreferrer"
-              className="label-mono text-[10px] text-gray-mid hover:text-fg"
-            >
-              SET UP BILLING
-            </a>
+          <div className="order-3 lg:order-none">
+            <ApiKeys session={session} />
+          </div>
+          <div className="order-4 lg:order-none">
+            <SignedRecords session={session} />
           </div>
         </div>
-        <div className="mt-2 flex flex-wrap items-center gap-4 border-t border-hairline pt-6">
-          <button type="button" onClick={out} className={ctaGhost}>
-            SIGN OUT
-          </button>
-          <DeleteAccount email={session.email} />
-        </div>
-      </section>
+      </div>
     </main>
   );
 }
