@@ -29,8 +29,9 @@ export default function CatalogTeaser({ onInstall }) {
         </p>
         <p className="mt-4 text-base leading-[1.6] text-gray-lt">
           It doesn't predict production, it reproduces it: same endpoints, same state, same failure
-          modes, repeatable on demand. A certificate becomes a measurement with a date on it, not a
-          promise about the future.
+          modes, repeatable on demand. A record becomes a measurement with a date on it, not a
+          promise about the future. Your agent says the task is done. <Worlds /> diffs the
+          environment and tells you what really changed.
         </p>
         <p className="mt-3 text-base leading-[1.6] text-gray-lt">
           Every world updates daily against the live service, patch notes, API changes, and
@@ -75,7 +76,7 @@ export default function CatalogTeaser({ onInstall }) {
             {copied ? "COPIED" : "COPY"}
           </button>
           <span aria-hidden="true">·</span>
-          <span className="tracking-[0.08em]">STRIPE WORLD, LOCAL, DETERMINISTIC</span>
+          <span className="tracking-[0.08em]">PICK ANY WORLD, RUNS ON YOUR MACHINE, NOTHING PHONES HOME</span>
           <button
             type="button"
             onClick={() => onInstall(STRIPE)}

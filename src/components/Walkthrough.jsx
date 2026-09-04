@@ -189,7 +189,9 @@ export default function Walkthrough() {
         <Micro>WHAT A RUN LOOKS LIKE</Micro>
         <H2>Pick an agent. Pick the weather. Read the world.</H2>
         <p className="mt-4 max-w-[720px] text-base leading-[1.6] text-gray-mid">
-          Four real agents, replayed. Every session reproduces to the byte.
+          A coding agent can say it fixed a bug and still fail every test. An assistant can say
+          your flight is booked when there is no row in the booking database. We do not read the
+          story. We read the database. Every session reproduces to the byte.
         </p>
 
         <div className="mt-8 space-y-3">
@@ -296,7 +298,9 @@ export default function Walkthrough() {
           >
             TEST YOUR OWN AGENT
           </Link>
-          <p className="label-mono mt-3 text-xs text-gray-mid">Free. One world. Your rules.</p>
+          <p className="label-mono mt-3 text-xs text-gray-mid">
+            Free. Any one world, your pick. Unlimited runs.
+          </p>
         </div>
       </div>
     </Section>

@@ -28,9 +28,20 @@ try {
 
 // 2. Banned words in source and bundle. "certif" and product-noun "twin" are
 // banned outright; access language stays honest.
-// "certif" left the ban list in round 5: the positioning now names the signed
-// certification report deliberately.
-const BANNED = [/waitlist/i, /on request/i, /coming soon/i, /\bbeta\b/i, /hosted worlds/i, /parallel fleets/i];
+// Round 6 rebanned "certif": the product ships records, not certificates, and
+// the permitted Enterprise compliance phrasing does not need the word.
+const BANNED = [
+  /waitlist/i,
+  /on request/i,
+  /coming soon/i,
+  /\bbeta\b/i,
+  /hosted worlds/i,
+  /parallel fleets/i,
+  /certif/i,
+  /guardrail(?!s\.mjs)/i,
+  /on.?premise/i,
+  /\bAI safety\b/i,
+];
 const DASHES = /[–—]/;
 const sources = walk("src").filter((f) => /\.(jsx?|tsx?|json|css)$/.test(f));
 for (const f of [...sources, "index.html"]) {

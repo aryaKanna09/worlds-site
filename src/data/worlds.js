@@ -20,7 +20,8 @@ export const CATEGORIES = [
 ];
 
 // Every world in the catalog is built and installable. `free` keeps Stripe
-// sorted first and on the free tier.
+// sorted first and powers the quickstart demo; the free tier itself is any
+// one world of the user's choosing.
 const t = (id, name, domain, category, description, free = false) => ({
   id,
   name,

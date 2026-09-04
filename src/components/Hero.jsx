@@ -19,12 +19,13 @@ export default function Hero() {
               Your agent said done. Is that true?
             </h1>
             <p className="mt-6 font-mono text-base leading-relaxed tracking-[0.08em] text-gray-mid">
-              <Worlds /> proves what your agent actually did.
+              <Worlds /> reads the database, not the story.
             </p>
             <p className="mt-6 max-w-[60ch] text-base leading-[1.7] text-gray-lt">
-              Every run replays under identical conditions, enforces the real business rules, and ends in
-              a signed report you can hand to a buyer, an auditor, or your board. Not a transcript, not a
-              pass rate, not the agent's own word for it.
+              Every run replays under identical conditions and ends in a signed record you can hand
+              to a buyer, an auditor, or your board. Not a transcript, not a pass rate, not the
+              agent's own word for it. It runs on your machine, nothing leaves your network, and
+              anyone holding the record can re run it and check us.
             </p>
             <div className="mt-8">
               <Link
@@ -35,7 +36,7 @@ export default function Hero() {
                 TEST YOUR OWN AGENT
               </Link>
               <p className="mt-4 font-mono text-sm tracking-[0.08em] text-gray-mid">
-                Free. One world. Your rules.
+                Free. Any one world, your pick. Unlimited runs.
               </p>
             </div>
           </div>

@@ -13,6 +13,6 @@ export const installSteps = (name) => [
   ],
   [
     "RUN A GRADED SESSION",
-    "Run once inside your existing suite. Worlds supplies the world, grades Completion and State Integrity across the whole run, and signs the result.",
+    "Run once inside your existing suite. Worlds supplies the world, grades Completion and State Integrity across the whole run, and signs a hash your machine computed. Environments are local and ephemeral, and the record never leaves your network.",
   ],
 ];

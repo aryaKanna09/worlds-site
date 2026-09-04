@@ -3,7 +3,7 @@
 const modules = import.meta.glob("./*.json", { eager: true });
 
 export const AGENTS = [
-  { key: "refund", label: "REFUND AGENT", system: "STRIPE" },
+  { key: "invoice", label: "INVOICE AGENT", system: "STRIPE" },
   { key: "offboarding", label: "OFFBOARDING AGENT", system: "OKTA" },
   { key: "quoting", label: "QUOTING AGENT", system: "SALESFORCE" },
   { key: "claims", label: "CLAIMS AGENT", system: "GUIDEWIRE" },

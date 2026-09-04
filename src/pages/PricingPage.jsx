@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { tiers, reportsNote } from "../data/pricing.js";
+import { tiers, sprint, pricingNotes } from "../data/pricing.js";
 import { track } from "../lib/analytics.ts";
 import { Micro, ctaGhost, ctaPrimary } from "../components/ui.jsx";
 
@@ -21,12 +21,17 @@ export default function PricingPage() {
       <div className="mx-auto max-w-[1120px] px-4 sm:px-6">
         <Micro>PRICING</Micro>
         <h1 className="mt-3 font-sans text-2xl font-medium tracking-[-0.02em] sm:text-3xl">
-          One price per company.
+          Start free. Pay for environments, not runs.
         </h1>
         <p className="label-mono mt-4 text-xs text-gray-mid">
-          FLAT PER COMPANY. NO USAGE BILLED.
+          NO METERED RUNS. NO SEAT COUNTS. SIGNING IS FREE ON EVERY TIER.
         </p>
-        <p className="mt-3 max-w-[60ch] text-base leading-[1.6] text-gray-lt">{reportsNote}</p>
+        <p className="mt-3 max-w-[70ch] text-base leading-[1.6] text-gray-lt">
+          Free is one world from the whole catalog, your pick, chosen once and fixed to your
+          account, so you test against the system you actually run in production from day one. The
+          upgrade is not more worlds. It is running worlds together, with State Integrity graded
+          across every system in the run.
+        </p>
         {fallback && (
           <p className="label-mono mt-4 text-xs text-gray-mid">
             CHECKOUT ISN'T LIVE YET ·{" "}
@@ -44,6 +49,7 @@ export default function PricingPage() {
                 {t.price}
                 {t.per && <span className="ml-1 font-mono text-xs font-normal text-gray-mid">{t.per}</span>}
               </p>
+              <p className="label-mono mt-2 text-[10px] text-gray-mid">UNLIMITED RUNS</p>
               <ul className="mt-5 space-y-2.5">
                 {t.features.map((f) => (
                   <li key={f} className="text-sm leading-[1.5] text-gray-lt">
@@ -51,9 +57,6 @@ export default function PricingPage() {
                   </li>
                 ))}
               </ul>
-              {t.note && (
-                <p className="label-mono mt-4 text-[10px] leading-[1.6] text-gray-mid">{t.note}</p>
-              )}
               <div className="mt-auto pt-6">
                 {t.signIn ? (
                   <Link to="/sign-in" className={`${ctaPrimary} block w-full text-center`}>
@@ -80,6 +83,34 @@ export default function PricingPage() {
                 )}
               </div>
             </div>
+          ))}
+        </div>
+
+        <div className="mt-3 flex flex-col gap-4 rounded-[2px] border border-hairline p-6 sm:flex-row sm:items-center">
+          <div className="shrink-0">
+            <p className="label-mono text-xs text-gray-mid">{sprint.name}</p>
+            <p className="mt-2 font-sans text-2xl font-medium tracking-[-0.02em]">
+              {sprint.price}
+              <span className="ml-1 font-mono text-xs font-normal text-gray-mid">{sprint.per}</span>
+            </p>
+          </div>
+          <p className="max-w-[60ch] text-sm leading-[1.6] text-gray-lt sm:px-6">{sprint.detail}</p>
+          <a
+            href={sprint.href}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => track("upgrade_clicked", { tier: "sprint" })}
+            className={`${ctaGhost} shrink-0 text-center sm:ml-auto`}
+          >
+            {sprint.cta}
+          </a>
+        </div>
+
+        <div className="mt-8 max-w-[80ch] space-y-2">
+          {pricingNotes.map((note) => (
+            <p key={note} className="font-mono text-xs leading-relaxed tracking-[0.02em] text-gray-mid">
+              {note}
+            </p>
           ))}
         </div>
       </div>

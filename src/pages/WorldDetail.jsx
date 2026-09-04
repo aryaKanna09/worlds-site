@@ -105,8 +105,8 @@ export default function WorldDetail() {
           <p className="mt-4 max-w-[60ch] text-base leading-[1.6] text-gray-lt">
             Everything else is generated. Two things are yours: confirm your agent reads the injected env
             vars, and write your business rules as assertions. Keep the harness you already have.{" "}
-            <Worlds /> installs as a fixture next to your existing tests, supplies the world, and signs
-            the result.
+            <Worlds /> installs as a fixture next to your existing tests, supplies the world, and
+            signs a hash you computed locally, so we never see the contents of your record.
           </p>
         </section>
       ) : (

@@ -1,4 +1,6 @@
-// Access is the product: one flat price per company, no usage billed.
+// Access is the product: pay for environments, never for runs, seats, or
+// signatures. Runs execute on the customer's infrastructure, so we cannot see
+// them and do not meter them.
 export const tiers = [
   {
     key: "free",
@@ -6,63 +8,88 @@ export const tiers = [
     price: "Free",
     cta: "GET STARTED FREE",
     signIn: true,
-    description: "One world, full access, certification as a one time add on.",
+    description: "Any one world from the catalog, your pick, fixed to your account.",
     worldLimit: 1,
     features: [
-      "Pick any one world from the catalog",
-      "Full access to that world, all standard grading and diffing",
-      "Certification not bundled: $300, paid once, when you want the signed report",
+      "One world from the catalog, your pick, chosen once and fixed to your account",
+      "Both grades and the full diff",
+      "Signed records, free forever",
+      "Public verification page",
+      "Runs entirely on your machine",
     ],
-    note: "Certification available any time as a one time add on.",
   },
   {
-    key: "startup",
-    name: "STARTUP",
-    price: "$350",
+    key: "team",
+    name: "TEAM",
+    price: "$400",
     per: "/mo",
     cta: "UPGRADE NOW",
     checkout: true,
-    description: "Two worlds, unlimited runs, certification included.",
-    worldLimit: 2,
+    description: "Full catalog, worlds run together, State Integrity graded across systems.",
+    worldLimit: null,
     features: [
-      "Two worlds, unlimited runs within them",
-      "Certification included",
-      "Up to three seats",
+      "Everything in Free",
+      "Full world catalog",
+      "Run worlds together in one environment, with State Integrity graded across systems",
+      "Multi agent chain runs",
+      "CI integration",
+      "Named API keys",
+      "Email support",
     ],
   },
   {
     key: "growth",
     name: "GROWTH",
-    price: "$1,800",
+    price: "$2,500",
     per: "/mo",
     cta: "UPGRADE NOW",
     checkout: true,
-    description: "8 worlds, unlimited seats, certification included.",
-    worldLimit: 8,
+    description: "Everything in Team, one custom world per year, report API.",
+    worldLimit: null,
     features: [
-      "8 worlds",
-      "Unlimited seats",
-      "Certification included",
-      "Priority access to new world releases",
+      "Everything in Team",
+      "One custom world per year",
+      "Priority access to new worlds",
+      "Report API",
+      "Shared Slack channel",
     ],
   },
   {
     key: "enterprise",
     name: "ENTERPRISE",
-    price: "Custom",
+    price: "$75,000 to $150,000",
+    per: "/yr",
     cta: "CHAT WITH OUR TEAM",
     href: "https://cal.com/usesparta",
-    description:
-      "Unlimited worlds and seats, custom SLA, custom worlds built to your stack if needed.",
+    description: "Unlimited custom worlds, validation exports, SLA and dedicated support.",
     worldLimit: null,
     features: [
-      "Unlimited worlds, unlimited seats",
-      "Custom SLA",
-      "Custom worlds built to your stack if needed",
-      "Signed certification report, a compliance and procurement artifact",
+      "Everything in Growth",
+      "Unlimited custom worlds",
+      "Validation exports: IQ, OQ and PQ, EU AI Act Article 50, and control evidence for CMMC and SOC 2",
+      "Alerting when a model version change supersedes a record",
+      "SLA and dedicated support",
+      "Twin engineering for your stack",
     ],
   },
 ];
 
-export const reportsNote =
-  "Every certification report carries both grades, Completion and State Integrity, signed. Included on every paid tier, and a one time add on on Free.";
+// Fixed scope engagement listed publicly; it sits between Growth and
+// Enterprise and is credited in full against Enterprise.
+export const sprint = {
+  name: "ACCEPTANCE SPRINT",
+  price: "$25,000 to $40,000",
+  per: "fixed",
+  cta: "CHAT WITH OUR TEAM",
+  href: "https://cal.com/usesparta",
+  detail:
+    "One world, one agent, one signed record, one validation export. Credited in full against Enterprise. Enterprise procurement does not buy vibes; this is how it approves us without making a platform decision.",
+};
+
+// Lines under the tier grid. The first is why runs are never metered.
+export const pricingNotes = [
+  "Unlimited runs on every tier, the free one included. We do not meter runs because Worlds runs on your infrastructure and we never see them. Run as much as you want. We never see it.",
+  "No seat counts. One account, unlimited named API keys with labels of your choosing, and every record notes the key that produced it, so attribution exists without user management.",
+  "Signing is free on every tier and always will be. The signature proves the record was not edited. Reproducibility is what proves the claim.",
+  "Records carry an expiry and are superseded when the agent build or model version changes. That is honesty about scope, not an upsell.",
+];

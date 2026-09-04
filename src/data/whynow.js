@@ -22,6 +22,6 @@ export const whynow = [
   },
   {
     kicker: true,
-    text: "Agents will soon act on every system your business runs on. Worlds is the proof layer that lets you trust them there.",
+    text: "The buying committee for agents moved from engineering to security and compliance, and they need an artifact nobody produces today. Worlds produces it, runs inside your environment, and is checkable without trusting us.",
   },
 ];
