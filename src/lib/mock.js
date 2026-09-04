@@ -62,6 +62,8 @@ export const signIn = (provider, email) =>
     signedIn: true,
     provider,
     email: email || "you@company.com",
+    name: state?.name || "",
+    company: state?.company || "",
     claim: state?.claim || null,
     key: state?.key || issuePlaceholderKey(),
     keySeen: state?.keySeen || false,
@@ -69,4 +71,38 @@ export const signIn = (provider, email) =>
 
 export const signOut = () => save(null);
 
+// Full account wipe. In the functional build this calls the delete endpoint
+// that revokes keys, deletes claims, and removes the auth user.
+export const deleteAccount = () => save(null);
+
 export const update = (patch) => save({ ...(state || {}), ...patch });
+
+// Claims a world for the signed-in session; returns true when live (instant).
+export const claimWorld = (world) => {
+  const live = world.id === "stripe";
+  save({
+    ...(state || {}),
+    claim: { world: world.id, name: world.name, status: live ? "active" : "provisioning" },
+    ...(live ? { key: issuePlaceholderKey(state?.key?.channel || "stable"), keySeen: false } : {}),
+  });
+  return live;
+};
+
+// The signed-out CLAIM FREE path: remember the world through sign in.
+const INTENT = "worlds_claim_intent";
+export const setClaimIntent = (world) => {
+  try {
+    localStorage.setItem(INTENT, JSON.stringify({ id: world.id, name: world.name }));
+  } catch {
+    // Ignore; the user just lands on the dashboard instead.
+  }
+};
+export const takeClaimIntent = () => {
+  try {
+    const raw = localStorage.getItem(INTENT);
+    localStorage.removeItem(INTENT);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+};

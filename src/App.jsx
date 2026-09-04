@@ -41,7 +41,7 @@ export default function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Home onInstall={openInstall} />} />
-          <Route path="/catalog" element={<Catalog onInstall={openInstall} />} />
+          <Route path="/catalog" element={<Catalog />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/sign-up" element={<SignUpPage />} />

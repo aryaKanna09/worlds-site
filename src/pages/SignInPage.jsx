@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signIn } from "../lib/mock.js";
+import { signIn, claimWorld, takeClaimIntent } from "../lib/mock.js";
+import { track } from "../lib/analytics.ts";
 import { GitHubMark, GoogleMark, MicrosoftMark } from "../components/BrandMarks.jsx";
 import { Micro, ctaPrimary } from "../components/ui.jsx";
 
@@ -20,6 +21,16 @@ export default function SignInPage({ heading = "SIGN IN" }) {
 
   const finish = (provider) => {
     signIn(provider, email || undefined);
+    // CLAIM FREE from the catalog routes through sign in back to that world.
+    const intent = takeClaimIntent();
+    if (intent) {
+      const live = claimWorld(intent);
+      track("world_claimed", { world: intent.id, live });
+      if (live) track("key_issued", { tier: "free" });
+      else track("provisioning_shown", { world: intent.id });
+      navigate(`/dashboard/worlds/${intent.id}`);
+      return;
+    }
     navigate("/dashboard");
   };
 

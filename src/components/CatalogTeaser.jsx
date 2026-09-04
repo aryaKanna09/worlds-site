@@ -37,7 +37,7 @@ export default function CatalogTeaser({ onInstall }) {
             key={world.id}
             world={world}
             index={String(i + 1).padStart(2, "0")}
-            onInstall={onInstall}
+            action={{ label: "INSTALL", onClick: () => onInstall(world) }}
           />
         ))}
       </div>

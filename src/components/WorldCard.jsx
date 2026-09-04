@@ -1,11 +1,11 @@
+import { Link } from "react-router-dom";
 import Ticks from "./Ticks.jsx";
 import WorldLogo from "./WorldLogo.jsx";
 import { ctaGhost } from "./ui.jsx";
 
-// Uniform card: fixed two-line description slot and the INSTALL button pinned
-// bottom-right, so every box in a grid is the same size with the action in the
-// same place. `index` is optional; the catalog renders without numbering.
-export default function WorldCard({ world, index, onInstall }) {
+// Uniform card with one configurable action: {label, to} renders a link,
+// {label, onClick} a button. One card serves the teaser and every catalog state.
+export default function WorldCard({ world, index, action }) {
   return (
     <article className="group relative flex h-full flex-col rounded-[2px] border border-hairline p-4 opacity-[0.92] transition-[border-color,opacity] duration-150 hover:border-[rgba(212,212,212,0.4)] hover:opacity-100">
       <Ticks className="opacity-0 transition-opacity duration-150 group-hover:opacity-100" />
@@ -19,9 +19,15 @@ export default function WorldCard({ world, index, onInstall }) {
         {world.description}
       </p>
       <div className="mt-auto flex justify-end pt-4">
-        <button type="button" onClick={() => onInstall(world)} className={ctaGhost}>
-          INSTALL
-        </button>
+        {action?.to ? (
+          <Link to={action.to} className={ctaGhost}>
+            {action.label}
+          </Link>
+        ) : action?.onClick ? (
+          <button type="button" onClick={action.onClick} className={ctaGhost}>
+            {action.label}
+          </button>
+        ) : null}
       </div>
     </article>
   );

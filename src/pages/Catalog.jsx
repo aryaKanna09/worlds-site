@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { worlds, WORLD_COUNT, CATEGORIES } from "../data/worlds.js";
 import WorldCard from "../components/WorldCard.jsx";
 import EmptyState from "../components/EmptyState.jsx";
+import { claimWorld, setClaimIntent, useMockSession } from "../lib/mock.js";
+import { track } from "../lib/analytics.ts";
 import { Micro } from "../components/ui.jsx";
 
 // Stripe always first, then alphabetical.
@@ -11,7 +14,9 @@ const SORTED = [...worlds].sort(
 
 const CHIPS = ["ALL", ...CATEGORIES];
 
-export default function Catalog({ onInstall }) {
+export default function Catalog() {
+  const navigate = useNavigate();
+  const session = useMockSession();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("ALL");
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -121,9 +126,36 @@ export default function Catalog({ onInstall }) {
             <div className="mt-6">
               {filtered.length ? (
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                  {filtered.map((world) => (
-                    <WorldCard key={world.id} world={world} onInstall={onInstall} />
-                  ))}
+                  {filtered.map((world) => {
+                    // One component, three auth states: signed out, free slot
+                    // available, and free claim already used.
+                    let action;
+                    if (session?.claim?.world === world.id) {
+                      action = { label: "CLAIMED", to: `/dashboard/worlds/${world.id}` };
+                    } else if (session?.signedIn && session.claim) {
+                      action = { label: "UNLOCK", to: "/pricing" };
+                    } else if (session?.signedIn) {
+                      action = {
+                        label: "CLAIM",
+                        onClick: () => {
+                          const live = claimWorld(world);
+                          track("world_claimed", { world: world.id, live });
+                          if (live) track("key_issued", { tier: "free" });
+                          else track("provisioning_shown", { world: world.id });
+                          navigate(`/dashboard/worlds/${world.id}`);
+                        },
+                      };
+                    } else {
+                      action = {
+                        label: "CLAIM FREE",
+                        onClick: () => {
+                          setClaimIntent(world);
+                          navigate("/sign-in");
+                        },
+                      };
+                    }
+                    return <WorldCard key={world.id} world={world} action={action} />;
+                  })}
                 </div>
               ) : (
                 <EmptyState />
