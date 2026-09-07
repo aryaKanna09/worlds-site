@@ -12,7 +12,7 @@ export default function CatalogTeaser({ onInstall }) {
   const [copied, setCopied] = useState(false);
 
   const copy = () => {
-    navigator.clipboard?.writeText("pip install worlds").then(() => {
+    navigator.clipboard?.writeText("npx twinlab demo").then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), COPY_FLASH_MS);
     });
@@ -37,6 +37,10 @@ export default function CatalogTeaser({ onInstall }) {
           Every world updates daily against the live service, patch notes, API changes, and
           internal updates land the same day, so your agent is graded on today's rules, not last
           quarter's.
+        </p>
+        <p className="mt-3 text-base leading-[1.6] text-gray-lt">
+          It runs alongside your agent as a sidecar, never inside it. Your agent's code and
+          imports stay exactly as they are.
         </p>
       </div>
       <p className="label-mono mt-4 text-xs text-gray-mid">
@@ -67,7 +71,7 @@ export default function CatalogTeaser({ onInstall }) {
         <div className="flex flex-wrap items-center gap-x-4 gap-y-3 font-mono text-xs text-gray-mid">
           <span className="tracking-[0.08em]">FREE FOR DEVELOPERS</span>
           <span aria-hidden="true">·</span>
-          <code className="text-gray-lt">pip install worlds</code>
+          <code className="text-gray-lt">npx twinlab demo</code>
           <button
             type="button"
             onClick={copy}

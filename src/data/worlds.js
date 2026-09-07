@@ -167,13 +167,6 @@ export const worlds = [
 // Single source of truth for every world count rendered on the site.
 export const WORLD_COUNT = worlds.length;
 
-// Install command per world, slug derived from the name (never hand-written).
-export const pipCommand = (name) =>
-  `pip install worlds-${name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")}`;
-
 // The homepage logo wall and catalog teaser: the most recognizable systems we
 // offer, all present in the catalog above.
 export const featuredWorldIds = [

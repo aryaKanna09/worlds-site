@@ -57,6 +57,11 @@ export default function PricingPage() {
                   </li>
                 ))}
               </ul>
+              {t.note && (
+                <p className="mt-4 font-mono text-xs leading-relaxed tracking-[0.02em] text-gray-mid">
+                  {t.note}
+                </p>
+              )}
               <div className="mt-auto pt-6">
                 {t.signIn ? (
                   <Link to="/sign-in" className={`${ctaPrimary} block w-full text-center`}>

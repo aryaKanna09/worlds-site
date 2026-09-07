@@ -70,6 +70,7 @@ export const tiers = [
       "SLA and dedicated support",
       "Twin engineering for your stack",
     ],
+    note: "Licensed and verified offline. Nothing about your data or your agent's runs ever leaves your environment.",
   },
 ];
 

@@ -3,13 +3,37 @@ import Ticks from "./Ticks.jsx";
 import { COPY_FLASH_MS } from "../data/ui.js";
 import { installSteps } from "../data/install.js";
 import { withWorlds } from "./Worlds.jsx";
-import { pipCommand } from "../data/worlds.js";
+
+// One copyable command per install step. Multi line commands (the CI snippet)
+// keep their line breaks.
+function CommandBlock({ command }) {
+  const [copied, setCopied] = useState(false);
+  const copy = () => {
+    navigator.clipboard?.writeText(command).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), COPY_FLASH_MS);
+    });
+  };
+  return (
+    <div className="mt-2 flex items-start justify-between gap-3 rounded-[2px] border border-hairline bg-[#0a0a0a] px-3 py-2.5">
+      <pre className="min-w-0 overflow-x-auto font-mono text-xs leading-relaxed text-gray-lt">
+        <code>{command}</code>
+      </pre>
+      <button
+        type="button"
+        onClick={copy}
+        aria-label={`Copy ${command}`}
+        className={`label-mono shrink-0 text-[10px] ${copied ? "text-accent" : "text-gray-mid hover:text-fg"}`}
+      >
+        {copied ? "COPIED" : "COPY"}
+      </button>
+    </div>
+  );
+}
 
 // One modal for every world, parameterized by the world it installs.
 export default function InstallModal({ world, onClose }) {
   const panelRef = useRef(null);
-  const [copied, setCopied] = useState(false);
-  const command = pipCommand(world.name);
   const steps = installSteps(world.name);
 
   useEffect(() => {
@@ -44,13 +68,6 @@ export default function InstallModal({ world, onClose }) {
     };
   }, []);
 
-  const copy = () => {
-    navigator.clipboard?.writeText(command).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), COPY_FLASH_MS);
-    });
-  };
-
   return (
     <div
       className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 p-0 sm:items-center sm:p-4"
@@ -79,30 +96,21 @@ export default function InstallModal({ world, onClose }) {
         </div>
 
         <ol className="mt-6 space-y-5">
-          {steps.map(([label, detail], i) => (
+          {steps.map(([label, detail, command], i) => (
             <li key={label} className="flex gap-4">
               <span className="label-mono shrink-0 text-xs text-gray-mid">
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <div>
+              <div className="min-w-0 flex-1">
                 <p className="label-mono text-xs text-fg">{label}</p>
-                <p className="mt-1 text-sm leading-[1.6] text-gray-lt">{withWorlds(detail)}</p>
+                <CommandBlock command={command} />
+                {detail && (
+                  <p className="mt-1.5 text-sm leading-[1.6] text-gray-lt">{withWorlds(detail)}</p>
+                )}
               </div>
             </li>
           ))}
         </ol>
-
-        <div className="mt-8 flex items-center justify-between gap-3 rounded-[2px] border border-hairline bg-[#0a0a0a] px-4 py-3">
-          <code className="truncate font-mono text-sm">{command}</code>
-          <button
-            type="button"
-            onClick={copy}
-            aria-label={`Copy ${command}`}
-            className={`label-mono shrink-0 text-xs ${copied ? "text-accent" : "text-gray-mid hover:text-fg"}`}
-          >
-            {copied ? "COPIED" : "COPY"}
-          </button>
-        </div>
       </div>
     </div>
   );
