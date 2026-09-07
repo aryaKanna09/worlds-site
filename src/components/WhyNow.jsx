@@ -34,9 +34,9 @@ function FadeRow({ row }) {
 
   if (row.kicker) {
     return (
-      <div ref={ref} className={`${fade} relative py-10 pl-7`}>
-        <span aria-hidden="true" className="absolute top-1/2 left-0 h-[22px] w-[10px] -translate-y-1/2 bg-accent" />
-        <p className="max-w-[720px] font-sans text-xl leading-snug font-medium text-fg sm:text-2xl">
+      <div ref={ref} className={`${fade} relative py-6 pl-6`}>
+        <span aria-hidden="true" className="absolute top-1/2 left-0 h-[16px] w-[8px] -translate-y-1/2 bg-accent" />
+        <p className="max-w-[720px] font-sans text-base leading-snug font-medium text-fg sm:text-lg">
           {withWorlds(row.text)}
         </p>
       </div>
@@ -44,9 +44,9 @@ function FadeRow({ row }) {
   }
 
   return (
-    <div ref={ref} className={`${fade} flex flex-col gap-3 py-8 sm:flex-row sm:gap-10`}>
+    <div ref={ref} className={`${fade} flex flex-col gap-2 py-5 sm:flex-row sm:gap-10`}>
       <span className="label-mono w-36 shrink-0 text-xs text-gray-mid">{row.date}</span>
-      <p className="max-w-[720px] text-lg leading-[1.6] text-gray-lt">
+      <p className="max-w-[720px] text-sm leading-[1.6] text-gray-lt">
         {row.text}{" "}
         {row.url ? (
           <a
@@ -67,9 +67,9 @@ function FadeRow({ row }) {
 
 export default function WhyNow() {
   return (
-    <Section>
+    <Section padding="py-10 md:py-14">
       <Micro>THE ENVIRONMENT CHANGED</Micro>
-      <div className="mt-8 divide-y divide-hairline border-y border-hairline">
+      <div className="mt-6 divide-y divide-hairline border-y border-hairline">
         {whynow.map((row) => (
           <FadeRow key={row.text} row={row} />
         ))}

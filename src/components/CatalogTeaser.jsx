@@ -1,23 +1,10 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import { worlds, featuredWorlds } from "../data/worlds.js";
-import { COPY_FLASH_MS } from "../data/ui.js";
+import { featuredWorlds } from "../data/worlds.js";
 import WorldCard from "./WorldCard.jsx";
 import Worlds from "./Worlds.jsx";
 import { Section, Micro, H2, ctaGhost } from "./ui.jsx";
 
-const STRIPE = worlds.find((w) => w.id === "stripe");
-
 export default function CatalogTeaser({ onInstall }) {
-  const [copied, setCopied] = useState(false);
-
-  const copy = () => {
-    navigator.clipboard?.writeText("npx twinlab demo").then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), COPY_FLASH_MS);
-    });
-  };
-
   return (
     <Section>
       <Micro>WORLDS</Micro>
@@ -65,30 +52,6 @@ export default function CatalogTeaser({ onInstall }) {
             →
           </span>
         </Link>
-      </div>
-
-      <div className="mt-8 border-t border-hairline pt-8">
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-3 font-mono text-xs text-gray-mid">
-          <span className="tracking-[0.08em]">FREE FOR DEVELOPERS</span>
-          <span aria-hidden="true">·</span>
-          <code className="text-gray-lt">npx twinlab demo</code>
-          <button
-            type="button"
-            onClick={copy}
-            className={`label-mono text-xs ${copied ? "text-accent" : "text-gray-mid hover:text-fg"}`}
-          >
-            {copied ? "COPIED" : "COPY"}
-          </button>
-          <span aria-hidden="true">·</span>
-          <span className="tracking-[0.08em]">PICK ANY WORLD, RUNS ON YOUR MACHINE, NOTHING PHONES HOME</span>
-          <button
-            type="button"
-            onClick={() => onInstall(STRIPE)}
-            className={`${ctaGhost} px-3 py-1.5 text-[11px]`}
-          >
-            QUICKSTART
-          </button>
-        </div>
       </div>
     </Section>
   );

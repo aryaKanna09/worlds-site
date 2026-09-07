@@ -22,6 +22,10 @@ export default function Header() {
           <Link to="/pricing" className={`${navLink} hidden sm:inline`}>
             PRICING
           </Link>
+          {/* Placeholder route: no docs site or public repo exists yet. */}
+          <Link to="/docs" className={`${navLink} hidden sm:inline`}>
+            DOCS
+          </Link>
           {session?.signedIn ? (
             <Link to="/dashboard" className={navLink}>
               DASHBOARD

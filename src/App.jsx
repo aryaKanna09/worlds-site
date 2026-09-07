@@ -13,6 +13,7 @@ import WorldDetail from "./pages/WorldDetail.jsx";
 import AdminClaims from "./pages/AdminClaims.jsx";
 import WorldFeed from "./pages/WorldFeed.jsx";
 import VerifyPage from "./pages/VerifyPage.jsx";
+import DocsPage from "./pages/DocsPage.jsx";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -51,6 +52,7 @@ export default function App() {
           <Route path="/admin/claims" element={<AdminClaims />} />
           <Route path="/worlds/:slug" element={<WorldFeed />} />
           <Route path="/verify/:digest" element={<VerifyPage />} />
+          <Route path="/docs" element={<DocsPage />} />
         </Routes>
         <Footer />
         {installWorld && <InstallModal world={installWorld} onClose={() => setInstallWorld(null)} />}

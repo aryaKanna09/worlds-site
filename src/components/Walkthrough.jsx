@@ -184,7 +184,7 @@ export default function Walkthrough() {
   ];
 
   return (
-    <Section>
+    <Section id="see-a-run">
       <div ref={sectionRef} title="Arrow keys switch agent and conditions. Space replays.">
         <Micro>WHAT A RUN LOOKS LIKE</Micro>
         <H2>Pick an agent. Pick the weather. Read the world.</H2>
@@ -213,7 +213,10 @@ export default function Walkthrough() {
             ))}
             <div className="ml-auto flex gap-2">
               <button type="button" onClick={() => replay("session")} className="label-mono rounded-[2px] border border-[rgba(212,212,212,0.4)] px-4 py-2 text-xs text-fg hover:border-fg">
-                REPLAY SESSION
+                <span aria-hidden="true" className="mr-2 text-accent">
+                  ▶
+                </span>
+                RUN
               </button>
               <button type="button" onClick={() => replay("fleet")} className="label-mono rounded-[2px] border border-hairline px-4 py-2 text-xs text-gray-lt hover:border-gray-lt hover:text-fg">
                 RUN {runsLabel}
@@ -254,15 +257,26 @@ export default function Walkthrough() {
           )}
         </div>
 
-        <div className="sticky bottom-0 z-10 mt-4 border border-hairline bg-bg p-4 lg:static">
-          {/* One flex row, one shared vertical center line for every child. */}
+        {done && mode === "session" && session.headline && (
+          <p className="label-mono mt-4 text-[10px] text-accent">{session.headline}</p>
+        )}
+        {/* Verdict band: styled like a test runner assertion result, red on fail. */}
+        <div
+          className={`sticky bottom-0 z-10 mt-2 rounded-[2px] border border-hairline bg-[#0a0a0a] p-4 font-mono lg:static ${
+            done && !session.pass ? "border-l-2 border-l-danger" : ""
+          }`}
+        >
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
             <div className="flex items-center gap-4">
-              <span className={`shrink-0 font-sans text-[32px] leading-none font-bold tracking-[-0.02em] ${done ? (session.pass ? "text-fg" : "text-accent") : "text-gray-mid"}`}>
-                {done ? (session.pass ? "PASS" : "FAIL") : "·"}
+              <span
+                className={`shrink-0 text-xl leading-none tracking-[0.08em] ${
+                  done ? (session.pass ? "text-fg" : "text-danger") : "text-gray-mid"
+                }`}
+              >
+                {done ? (session.pass ? "✓ PASS" : "✕ FAIL") : "·"}
               </span>
               {done && (
-                <p className="line-clamp-2 max-w-[46ch] text-sm leading-[1.4] text-gray-lt">
+                <p className="line-clamp-3 max-w-[60ch] text-xs leading-[1.5] text-gray-lt">
                   {session.consequence}
                 </p>
               )}
@@ -276,7 +290,15 @@ export default function Walkthrough() {
               </p>
             </div>
           </div>
+          {done && mode === "session" && session.note && (
+            <p className="mt-3 text-xs leading-[1.5] text-gray-lt">{session.note}</p>
+          )}
         </div>
+        {done && mode === "session" && (
+          <p className="mt-4 text-sm leading-[1.6] text-gray-lt">
+            Now imagine it running across a thousand.
+          </p>
+        )}
         <p className="mt-3 font-mono text-xs tracking-[0.02em] text-gray-mid">
           This is a replay of a recorded session. Runs reproduce to the byte; run it twice and compare the hash.
         </p>

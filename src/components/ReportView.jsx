@@ -3,16 +3,21 @@ import Ticks from "./Ticks.jsx";
 const Pending = () => <span className="text-gray-mid">PENDING</span>;
 
 // The one record renderer. Five pinned values, two grades, an expiry. It reads
-// as a build artifact, never as a diploma: no seals, no badges.
-export default function ReportView({ report, watermark }) {
+// as a build artifact, never as a diploma: no seals, no badges. `compact`
+// halves the vertical footprint for the closing artifact treatment.
+export default function ReportView({ report, watermark, compact = false }) {
   return (
-    <div className="relative rounded-[2px] border border-hairline p-6 font-mono text-sm leading-relaxed sm:p-8">
+    <div
+      className={`relative rounded-[2px] border border-hairline font-mono leading-relaxed ${
+        compact ? "p-4 text-xs sm:p-5" : "p-6 text-sm sm:p-8"
+      }`}
+    >
       <Ticks corners={["tl", "bl"]} />
       {watermark && (
         <span className="label-mono absolute top-4 right-4 text-[10px] text-gray-mid">{watermark}</span>
       )}
       <p className="tracking-[0.08em] text-fg uppercase">SIGNED RECORD</p>
-      <div className="mt-6 grid grid-cols-[150px_1fr] gap-y-2">
+      <div className={`grid gap-y-1.5 ${compact ? "mt-4 grid-cols-[120px_1fr]" : "mt-6 gap-y-2 grid-cols-[150px_1fr]"}`}>
         <span className="tracking-[0.08em] text-gray-mid">AGENT BUILD</span>
         <span className="text-gray-lt">{report.agentBuild}</span>
         <span className="tracking-[0.08em] text-gray-mid">MODEL</span>
@@ -31,11 +36,13 @@ export default function ReportView({ report, watermark }) {
         <span className="text-gray-lt">{report.stateIntegrity}</span>
         <span className="tracking-[0.08em] text-gray-mid">MOVEMENT</span>
         <span className="text-gray-lt">
-          {report.movement.map(([category, value]) => (
-            <span key={category} className="block">
-              {category} {value}
-            </span>
-          ))}
+          {compact
+            ? report.movement.map(([category, value]) => `${category} ${value}`).join(" · ")
+            : report.movement.map(([category, value]) => (
+                <span key={category} className="block">
+                  {category} {value}
+                </span>
+              ))}
         </span>
         <span className="tracking-[0.08em] text-gray-mid">EXPIRES</span>
         <span className="text-gray-lt">{report.expires}</span>

@@ -22,6 +22,6 @@ export const whynow = [
   },
   {
     kicker: true,
-    text: "Compliance signs off on agents now, not engineering. They need evidence nobody produces yet. Worlds produces it, in your environment, checkable without trusting us.",
+    text: "Engineering ships it. Compliance signs it. Both need the same evidence, and nobody produces it yet. Worlds produces it, in your environment, checkable without trusting us.",
   },
 ];

@@ -3,7 +3,7 @@ import Sphere from "./Sphere.jsx";
 import LogoWall from "./LogoWall.jsx";
 import { track } from "../lib/analytics.ts";
 import Worlds from "./Worlds.jsx";
-import { Micro, ctaPrimary } from "./ui.jsx";
+import { Micro, ctaPrimary, ctaGhost } from "./ui.jsx";
 
 export default function Hero() {
   return (
@@ -22,10 +22,9 @@ export default function Hero() {
               <Worlds /> reads the database, not the story.
             </p>
             <p className="mt-6 max-w-[60ch] text-base leading-[1.7] text-gray-lt">
-              Every run replays under identical conditions and ends in a signed record you can hand
-              to a buyer, an auditor, or your board. Not a transcript, not a pass rate, not the
-              agent's own word for it. It runs on your machine, nothing leaves your network, and
-              anyone holding the record can re run it and check us.
+              Every run replays under identical conditions and shows you exactly what your agent
+              actually touched. Not a transcript, not a pass rate, not the agent's own word for
+              it. It runs on your machine, in your CI, nothing leaves your network.
             </p>
             <div className="mt-8">
               <Link
@@ -37,6 +36,31 @@ export default function Hero() {
               </Link>
               <p className="mt-4 font-mono text-sm tracking-[0.08em] text-gray-mid">
                 Free. Any one world, your pick. Unlimited runs.
+              </p>
+              <a
+                href="#see-a-run"
+                onClick={(e) => {
+                  // Explicit scroll: hash navigation alone does not reliably
+                  // move the viewport once the SPA has loaded.
+                  e.preventDefault();
+                  const el = document.getElementById("see-a-run");
+                  if (el) {
+                    window.scrollTo({
+                      top: el.getBoundingClientRect().top + window.scrollY - 56,
+                      behavior: "smooth",
+                    });
+                  }
+                  track("cta_see_a_run_clicked", { source: "hero" });
+                }}
+                className={`${ctaGhost} mt-4`}
+              >
+                <span aria-hidden="true" className="mr-2 text-accent">
+                  ▶
+                </span>
+                SEE A RUN HAPPEN
+              </a>
+              <p className="mt-5 font-mono text-xs tracking-[0.02em] text-gray-mid">
+                Run it somewhere your agent's mistakes are free.
               </p>
             </div>
           </div>
